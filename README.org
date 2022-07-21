@@ -1,0 +1,23 @@
+#+title:  Doom Emacs configuration
+#+author: Kevin Kaiser
+#+author: k8x1d@proton.me
+
+#+attr_html: :width 30%;
+[[file:splash/doom-emacs-color.png]]
+
+
+** Aim(s)
+TODO
+
+** Configuration
+Output of [[file:doom-emacs.org][doom-emacs.org]]:
+- [[file:init.el][init.el]]
+- [[file:packages.el][packages.el]]
+- [[file:config.el][config.el]]
+
+If you are interested in a similar litterate configuration, you should also take a look at his [[https://gitlab.com/zzamboni/dot-doom][Diego Zamboni doom emacs configuration]] that I used as model. You should also check out his free book on [[https://leanpub.com/lit-config][Literate Configuration]].
+
+For great splash image, see [[https://gitlab.com/zzamboni/dot-doom/-/tree/master/splash]].
+
+** How to deploy?
+TODO
