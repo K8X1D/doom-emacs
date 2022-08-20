@@ -376,13 +376,52 @@ All the config files are generated from this Org file, to try and make its meani
 
 ** Esthetics
 *** Fonts
+#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+(package! mixed-pitch)
+#+end_src
+
 #+begin_src emacs-lisp
-(setq doom-font (font-spec :family "JuliaMono" :size 16))
+;;(setq doom-font (font-spec :family "JuliaMono" :size 16))
+(setq doom-font (font-spec :family "JuliaMono" :size 16)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 18))
+
+(use-package! mixed-pitch
+  :hook (org-mode . mixed-pitch-mode))
+#+end_src
+
+*** Transparency
+#+begin_src emacs-lisp
+  (unless (featurep 'pgtk)
+    (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
+    (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
+    (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+    (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+    ;; ;; Set transparency of emacs
+    (defun kk/transparency (value)
+      "Sets the transparency of the frame window. 0=transparent/100=opaque"
+      (interactive "nTransparency Value 0 - 100 opaque:")
+      (set-frame-parameter (selected-frame) 'alpha value)))
+
+  ;; For emacs pgtk >= 29
+  (when (featurep 'pgtk)
+    (if (version< emacs-version "29")
+        ;; initial transparency
+        (set-frame-parameter nil 'alpha-background 80)
+      (add-to-list 'default-frame-alist '(alpha-background . 80))
+
+      ;; function to change transparency
+      (defun kk/transparency (value)
+        "Sets the transparency of the frame window. 0=transparent/100=opaque"
+        (interactive "nTransparency Value 0 - 100 opaque:")
+        (set-frame-parameter (selected-frame) 'alpha-background value))))
 #+end_src
 
 *** Theme
 #+begin_src emacs-lisp
-(setq doom-theme 'doom-gruvbox)
+;;(setq doom-theme 'doom-gruvbox)
+(setq doom-theme 'modus-vivendi)
+(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
 #+end_src
 
 *** Lines numbers
@@ -395,6 +434,15 @@ All the config files are generated from this Org file, to try and make its meani
 (setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
 #+end_src
 
+* Guix interaction
+#+begin_src scheme :tangle ~/.config/guix/manifests/doom-emacs.scm
+(specifications->manifest
+ '(
+   "emacs-next-pgtk"
+   ))
+
+#+end_src
+
 * Org
 ** Configuration
 #+begin_src emacs-lisp
@@ -403,6 +451,10 @@ All the config files are generated from this Org file, to try and make its meani
 
 ** Esthetics
 *** Bullets
+#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+(package! org-superstar)
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package! org-superstar
   :hook (org-mode . org-superstar-mode)
@@ -411,12 +463,15 @@ All the config files are generated from this Org file, to try and make its meani
   (setq org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
 #+end_src
 
+#+RESULTS:
+
 * Coding
 ** Julia support
 *** Lsp
 #+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
 (package! lsp-julia)
 #+end_src
+
 #+begin_src emacs-lisp
 (use-package! lsp-julia
   :config
