@@ -9,6 +9,7 @@
 #+author: Kevin Kaiser
 #+email: k8x1d@protonmail.ch
 
+# TODO: set-up eglot, lsp is invasive
 
 * Set-up
 #+begin_src bash
@@ -326,7 +327,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +roam2)               ; organize your plain life in plain text
+       (org +jupyter +pandoc +pomodoro +dragndrop +roam2 +present +pretty)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
@@ -375,20 +376,6 @@ All the config files are generated from this Org file, to try and make its meani
 #+end_src
 
 ** Esthetics
-*** Fonts
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
-(package! mixed-pitch)
-#+end_src
-
-#+begin_src emacs-lisp
-;;(setq doom-font (font-spec :family "JuliaMono" :size 16))
-(setq doom-font (font-spec :family "JuliaMono" :size 16)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 18))
-
-(use-package! mixed-pitch
-  :hook (org-mode . mixed-pitch-mode))
-#+end_src
-
 *** Transparency
 #+begin_src emacs-lisp
   (unless (featurep 'pgtk)
@@ -418,10 +405,32 @@ All the config files are generated from this Org file, to try and make its meani
 #+end_src
 
 *** Theme
+#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+(package! solaire-mode :disable t) ;; cause problems with modus-themes https://github.com/protesilaos/modus-themes/issues/35
+(package! mixed-pitch)
+#+end_src
+
 #+begin_src emacs-lisp
-;;(setq doom-theme 'doom-gruvbox)
-(setq doom-theme 'modus-vivendi)
-(define-key global-map (kbd "<f5>") #'modus-themes-toggle)
+(use-package! emacs
+  :init
+  ;; Add all your customizations prior to loading the themes
+  ;;(setq modus-themes-italic-constructs t
+  ;;      modus-themes-bold-constructs nil
+  ;;      modus-themes-region '(bg-only no-extend))
+  ;;(setq modus-themes-mixed-fonts t)
+  ;; Main typeface
+  (set-face-attribute 'default nil :family "JuliaMono" :height 120)
+  ;; Proportionately spaced typeface
+  (set-face-attribute 'variable-pitch nil :family "DejaVu Sans" :height 1.5)
+  ;; Monospaced typeface
+  (set-face-attribute 'fixed-pitch nil :family "JuliaMono" :height 1.0)
+  :config
+  ;;(setq doom-theme 'modus-vivendi)
+  (setq doom-theme 'doom-gruvbox)
+  :hook
+  ;;(text-mode . variable-pitch-mode)
+  (text-mode . mixed-pitch-mode))
+  ;;:bind ("<f5>" . modus-themes-toggle))
 #+end_src
 
 *** Lines numbers
@@ -438,7 +447,43 @@ All the config files are generated from this Org file, to try and make its meani
 #+begin_src scheme :tangle ~/.config/guix/manifests/doom-emacs.scm
 (specifications->manifest
  '(
-   "emacs-next-pgtk"
+   ;;"emacs-next-pgtk"
+   "emacs-native-comp"
+
+   "font-juliamono"
+   "font-dejavu"
+   "font-hack"
+   "font-fira-sans"
+   "font-fira-code"
+   "font-fira-mono"
+   "font-iosevka"
+   "font-overpass"
+
+   "graphviz"
+
+   ;; vterm
+   "cmake"
+   "make"
+   "gcc-toolchain"
+   "libtool"
+   "perl"
+
+   ;; flycheck
+   "ispell"
+
+   ;; cc
+   "glslang"
+
+   ;; markdown
+   "markdown"
+
+   ;; sh
+   "shellcheck"
+
+   ;; python
+   "python-isort"
+   "python-nose"
+
    ))
 
 #+end_src
@@ -473,9 +518,10 @@ All the config files are generated from this Org file, to try and make its meani
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package! lsp-julia
-  :config
-  (setq lsp-julia-default-environment "~/.julia/environments/v1.7"))
+  (use-package! lsp-julia
+    :config
+    (setq lsp-julia-default-environment "~/.julia/environments/v1.7"))
+;;lsp-headerline-breakcrumb-mode
 #+end_src
 
 *** REPL
@@ -534,7 +580,6 @@ All the config files are generated from this Org file, to try and make its meani
 #+begin_src emacs-lisp
 (setq +latex-viewers '(pdf-tools))
 #+end_src
-
 ** Zotero support
 *** Bibliography location
 #+begin_src emacs-lisp
@@ -548,4 +593,41 @@ All the config files are generated from this Org file, to try and make its meani
 (map! :leader :desc "Open a PDF" "oz" #'ivy-bibtex)
 #+end_src
 
-#+RESULTS:
+** Pdf support
+#+begin_src emacs-lisp
+(use-package! pdf-tools
+  :hook (pdf-view-mode . pdf-view-midnight-minor-mode))
+#+end_src
+
+** Languagetools support
+#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+(package! lsp-ltex)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package! lsp-ltex
+  :hook (LaTeX-mode . (lambda ()
+                       (require 'lsp-ltex)
+                       (lsp-deferred)))
+  :init
+  (setq lsp-ltex-version "15.2.0"))
+
+  (defun kk/start-ltex ()
+    (interactive)
+    (require 'lsp-ltex)
+    (call-interactively #'lsp))
+  #+end_src
+
+** LSP configuration
+#+begin_src emacs-lisp
+(setq flycheck-checker-error-threshold 1000)
+;;(ispell-change-dictionary "en_US" t)
+(setq lsp-ui-sideline-show-code-actions t)
+#+end_src
+
+** Daemon mode
+#+begin_src emacs-lisp
+;;(setq inhibit-x-resources t)
+;;(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+(server-start)
+#+end_src
