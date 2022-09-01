@@ -325,7 +325,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       ;;nix               ; I hereby declare "nix geht mehr!"
+       nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org +jupyter +pandoc +pomodoro +dragndrop +roam2 +present +pretty)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
@@ -394,8 +394,8 @@ All the config files are generated from this Org file, to try and make its meani
   (when (featurep 'pgtk)
     (if (version< emacs-version "29")
         ;; initial transparency
-        (set-frame-parameter nil 'alpha-background 80)
-      (add-to-list 'default-frame-alist '(alpha-background . 80))
+        (set-frame-parameter nil 'alpha-background 100)
+      (add-to-list 'default-frame-alist '(alpha-background . 100))
 
       ;; function to change transparency
       (defun kk/transparency (value)
@@ -411,26 +411,40 @@ All the config files are generated from this Org file, to try and make its meani
 #+end_src
 
 #+begin_src emacs-lisp
+;;(use-package! emacs
+;;  :init
+;;  ;; Add all your customizations prior to loading the themes
+;;  (setq modus-themes-italic-constructs t
+;;        modus-themes-bold-constructs nil
+;;        modus-themes-region '(bg-only no-extend))
+;;  ;;(setq modus-themes-mixed-fonts t)
+;;  ;; Main typeface
+;;  (set-face-attribute 'default nil :family "JuliaMono" :height 120)
+;;  ;; Proportionately spaced typeface
+;;  (set-face-attribute 'variable-pitch nil :family "DejaVu Sans" :height 1.5)
+;;  ;; Monospaced typeface
+;;  (set-face-attribute 'fixed-pitch nil :family "JuliaMono" :height 1.0)
+;;  :config
+;;  (setq doom-theme 'modus-vivendi)
+;;  :hook
+;;  ;;(text-mode . variable-pitch-mode)
+;;  (text-mode . mixed-pitch-mode)
+;;  :bind ("<f5>" . modus-themes-toggle))
+
 (use-package! emacs
   :init
-  ;; Add all your customizations prior to loading the themes
-  ;;(setq modus-themes-italic-constructs t
-  ;;      modus-themes-bold-constructs nil
-  ;;      modus-themes-region '(bg-only no-extend))
-  ;;(setq modus-themes-mixed-fonts t)
   ;; Main typeface
-  (set-face-attribute 'default nil :family "JuliaMono" :height 120)
+  ;;(set-face-attribute 'default nil :family "JuliaMono" :height 120)
+  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 120)
   ;; Proportionately spaced typeface
   (set-face-attribute 'variable-pitch nil :family "DejaVu Sans" :height 1.5)
   ;; Monospaced typeface
-  (set-face-attribute 'fixed-pitch nil :family "JuliaMono" :height 1.0)
+  ;;(set-face-attribute 'fixed-pitch nil :family "JuliaMono" :height 1.0)
+  (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono" :height 1.0)
   :config
-  ;;(setq doom-theme 'modus-vivendi)
   (setq doom-theme 'doom-gruvbox)
   :hook
-  ;;(text-mode . variable-pitch-mode)
   (text-mode . mixed-pitch-mode))
-  ;;:bind ("<f5>" . modus-themes-toggle))
 #+end_src
 
 *** Lines numbers
@@ -448,6 +462,7 @@ All the config files are generated from this Org file, to try and make its meani
 (specifications->manifest
  '(
    ;;"emacs-next-pgtk"
+   ;;"emacs-pgtk-native-comp"
    "emacs-native-comp"
 
    "font-juliamono"
@@ -650,5 +665,5 @@ All the config files are generated from this Org file, to try and make its meani
 #+begin_src emacs-lisp
 ;;(setq inhibit-x-resources t)
 ;;(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-(server-start)
+;;(server-start)
 #+end_src
