@@ -9,7 +9,7 @@
 #+author: Kevin Kaiser
 #+email: k8x1d@protonmail.ch
 
-# TODO: set-up eglot, lsp is invasive
+# TODO: mirror to githib
 
 * Set-up
 #+begin_src bash
