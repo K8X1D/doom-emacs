@@ -17,7 +17,8 @@ Output of [[file:doom-emacs.org][doom-emacs.org]]:
 
 If you are interested in a similar litterate configuration, you should also take a look at his [[https://gitlab.com/zzamboni/dot-doom][Diego Zamboni doom emacs configuration]] that I used as model. You should also check out his free book on [[https://leanpub.com/lit-config][Literate Configuration]].
 
-For great splash image, see [[https://gitlab.com/zzamboni/dot-doom/-/tree/master/splash]].
+For great splash images, see [[https://gitlab.com/zzamboni/dot-doom/-/tree/master/splash]].
 
+For great icons, see https://github.com/eccentric-j/doom-icon
 ** How to deploy?
 TODO
