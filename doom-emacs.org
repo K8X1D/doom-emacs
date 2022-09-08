@@ -9,8 +9,6 @@
 #+author: Kevin Kaiser
 #+email: k8x1d@protonmail.ch
 
-# TODO: mirror to githib
-
 * Set-up
 #+begin_src bash
 ln -s $PWD/splash ~/.doom.d
@@ -325,7 +323,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       nix               ; I hereby declare "nix geht mehr!"
+       (nix +lsp)               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        (org +jupyter +pandoc +pomodoro +dragndrop +roam2 +present +pretty)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
@@ -340,7 +338,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
        ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
-       ;;(scheme +guile +lsp)   ; a fully conniving family of lisps ;; FIXME: cause problem on guix
+       (scheme +guile +lsp)   ; a fully conniving family of lisps
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
