@@ -1,6 +1,6 @@
 :DOC-CONFIG:
 # Tangle by default to config.el, which is the most common case
-#+property: header-args:emacs-lisp :tangle ~/.doom.d/config.el
+#+property: header-args:emacs-lisp :tangle .doom.d/config.el
 #+property: header-args :mkdirp yes :comments no
 #+startup: fold
 :END:
@@ -10,11 +10,6 @@
 #+email: k8x1d@protonmail.ch
 
 * Set-up
-#+begin_src bash
-ln -s $PWD/splash ~/.doom.d
-#+end_src
-
-#+RESULTS:
 * Doom config file overview
 
 Doom Emacs uses three config files:
@@ -29,7 +24,7 @@ All the config files are generated from this Org file, to try and make its meani
 
 ** Config file headers
 #+html: <details><summary>init.el</summary>
-#+begin_src emacs-lisp :tangle ~/.doom.d/init.el
+#+begin_src emacs-lisp :tangle .doom.d/init.el
 ;;; init.el -*- lexical-binding: t; -*-
 
 ;; This file controls what Doom modules are enabled and what order they load
@@ -49,7 +44,7 @@ All the config files are generated from this Org file, to try and make its meani
 #+html: </details>
 
 #+html: <details><summary>packages.el</summary>
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
@@ -185,7 +180,7 @@ All the config files are generated from this Org file, to try and make its meani
 #+html: </details>
 
 * Doom modules
-#+begin_src emacs-lisp :tangle ~/.doom.d/init.el
+#+begin_src emacs-lisp :tangle .doom.d/init.el
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
        ;;chinese
@@ -403,7 +398,7 @@ All the config files are generated from this Org file, to try and make its meani
 #+end_src
 
 *** Theme
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
 (package! solaire-mode :disable t) ;; cause problems with modus-themes https://github.com/protesilaos/modus-themes/issues/35
 (package! mixed-pitch)
 #+end_src
@@ -509,7 +504,7 @@ All the config files are generated from this Org file, to try and make its meani
 
 ** Esthetics
 *** Bullets
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
 (package! org-superstar)
 #+end_src
 
@@ -526,7 +521,7 @@ All the config files are generated from this Org file, to try and make its meani
 * Coding
 ** Julia support
 *** Lsp
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
 ;;(package! lsp-julia)
 ;;(package! eglot-jl)
 #+end_src
@@ -543,7 +538,7 @@ All the config files are generated from this Org file, to try and make its meani
 #+end_src
 
 *** REPL
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
 (package! julia-repl :disable t)
 (package! julia-vterm)
 #+end_src
@@ -564,7 +559,7 @@ All the config files are generated from this Org file, to try and make its meani
 #+end_src
 
 *** Babel support
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
 (package! ob-julia-vterm)
 #+end_src
 #+begin_src emacs-lisp
@@ -576,7 +571,7 @@ All the config files are generated from this Org file, to try and make its meani
 
 ** R support
 *** REPL
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
 (package! R-vterm
   :recipe (:host gitlab :repo "oryp6/editors_set-up/r-vterm"))
 #+end_src
@@ -618,12 +613,33 @@ All the config files are generated from this Org file, to try and make its meani
 #+end_src
 
 ** Languagetools support
-#+begin_src emacs-lisp :tangle ~/.doom.d/packages.el
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
 ;;(package! lsp-ltex)
-(package! lsp-ltex)
+#+end_src
+
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
+;;(package! lsp-ltex)
 (package! eglot-ltex
   :recipe (:host github :repo "emacs-languagetool/eglot-ltex"))
 #+end_src
+
+#+begin_src emacs-lisp
+;;(use-package! lsp-ltex
+;;  :hook (LaTeX-mode . (lambda ()
+;;                        (require 'lsp-ltex)
+;;                        (lsp-deferred)))
+;;  :init
+;;  (setq lsp-ltex-version "15.2.0"))
+;;
+;;(defun kk/start-ltex ()
+;;  (interactive)
+;;  (require 'lsp-ltex)
+;;  (call-interactively #'lsp))
+#+end_src
+
+#+RESULTS:
+
+
 
 #+begin_src emacs-lisp
 (setq eglot-languagetool-server-path "~/Documents/Logiciels/editors_set-up/ltex-ls-15.2.0")
@@ -637,20 +653,8 @@ All the config files are generated from this Org file, to try and make its meani
   (interactive)
   (require 'eglot-ltex)
   (call-interactively #'eglot))
-
-
-;;(use-package! lsp-ltex
-;;  :hook (LaTeX-mode . (lambda ()
-;;                        (require 'lsp-ltex)
-;;                        (lsp-deferred)))
-;;  :init
-;;  (setq lsp-ltex-version "15.2.0"))
-;;
-;;(defun kk/start-ltex ()
-;;  (interactive)
-;;  (require 'lsp-ltex)
-;;  (call-interactively #'lsp))
   #+end_src
+
 
 ** LSP configuration
 #+begin_src emacs-lisp
