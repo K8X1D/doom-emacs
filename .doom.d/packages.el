@@ -49,24 +49,10 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(package! solaire-mode :disable t) ;; cause problems with modus-themes https://github.com/protesilaos/modus-themes/issues/35
 (package! mixed-pitch)
-
-(package! org-superstar)
-
-;;(package! lsp-julia)
-;;(package! eglot-jl)
 
 (package! julia-repl :disable t)
 (package! julia-vterm)
-
 (package! ob-julia-vterm)
 
-(package! R-vterm
-  :recipe (:host gitlab :repo "oryp6/editors_set-up/r-vterm"))
-
-;;(package! lsp-ltex)
-
-;;(package! lsp-ltex)
-(package! eglot-ltex
-  :recipe (:host github :repo "emacs-languagetool/eglot-ltex"))
+(package! lsp-ltex)

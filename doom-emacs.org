@@ -1,16 +1,14 @@
 :DOC-CONFIG:
 # Tangle by default to config.el, which is the most common case
-#+property: header-args:emacs-lisp :tangle .doom.d/config.el
-#+property: header-args :mkdirp yes :comments no
-#+startup: fold
+#+PROPERTY: header-args :mkdirp yes :comments no :tangle .doom.d/config.el
+#+STARTUP: fold
 :END:
 
 #+title: Doom Emacs configuration
 #+author: Kevin Kaiser
 #+email: k8x1d@protonmail.ch
 
-* Set-up
-* Doom config file overview
+* Doom config files overview
 
 Doom Emacs uses three config files:
 
@@ -22,9 +20,9 @@ There are other files that can be loaded, but theses are the main ones. The load
 
 All the config files are generated from this Org file, to try and make its meaning as clear as possible. All =package!= declarations are written to =packages.el=, all other LISP code is written to =config.el=.
 
-** Config file headers
+** Config files headers
 #+html: <details><summary>init.el</summary>
-#+begin_src emacs-lisp :tangle .doom.d/init.el
+#+BEGIN_SRC emacs-lisp :tangle .doom.d/init.el
 ;;; init.el -*- lexical-binding: t; -*-
 
 ;; This file controls what Doom modules are enabled and what order they load
@@ -40,11 +38,11 @@ All the config files are generated from this Org file, to try and make its meani
 ;;
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
-#+end_src
+#+END_SRC
 #+html: </details>
 
 #+html: <details><summary>packages.el</summary>
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
+#+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
@@ -95,11 +93,11 @@ All the config files are generated from this Org file, to try and make its meani
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
-#+end_src
+#+END_SRC
 #+html: </details>
 
 #+html: <details><summary>config.el</summary>
-#+begin_src emacs-lisp
+#+BEGIN_SRC emacs-lisp
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
 ;; Place your private configuration here! Remember, you do not need to run 'doom
@@ -108,7 +106,7 @@ All the config files are generated from this Org file, to try and make its meani
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
+;;(setq user-full-name "John Doe"
 ;;      user-mail-address "john@doe.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
@@ -123,9 +121,9 @@ All the config files are generated from this Org file, to try and make its meani
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light))
+;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
 ;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
-
+;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
 ;; refresh your font settings. If Emacs still can't find your font, it likely
@@ -176,11 +174,11 @@ All the config files are generated from this Org file, to try and make its meani
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
-#+end_src
+#+END_SRC
 #+html: </details>
 
 * Doom modules
-#+begin_src emacs-lisp :tangle .doom.d/init.el
+#+BEGIN_SRC emacs-lisp :tangle .doom.d/init.el
 (doom! :input
        ;;bidi              ; (tfel ot) thgir etirw uoy gnipleh
        ;;chinese
@@ -191,7 +189,7 @@ All the config files are generated from this Org file, to try and make its meani
        company           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
-       ivy               ; a search engine for love and life
+       ;;ivy               ; a search engine for love and life
        vertico           ; the search engine of the future
 
        :ui
@@ -203,7 +201,7 @@ All the config files are generated from this Org file, to try and make its meani
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
        indent-guides     ; highlighted indent columns
-       ligatures         ; ligatures and symbols to make your code pretty again
+       ;;ligatures         ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
        ;;nav-flash         ; blink cursor line after big motions
@@ -213,7 +211,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;tabs              ; a tab bar for Emacs
        treemacs          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
-       vc-gutter         ; vcs diff in the fringe
+       (vc-gutter +pretty) ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
        ;;window-select     ; visually switch windows
        workspaces        ; tab emulation, persistence & separate workspaces
@@ -231,25 +229,25 @@ All the config files are generated from this Org file, to try and make its meani
        ;;parinfer          ; turn lisp into python, sort of
        ;;rotate-text       ; cycle region at point between text candidates
        snippets          ; my elves. They type so I don't have to
-       word-wrap         ; soft wrapping with language-aware indent
+       ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
        dired             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
-       ibuffer         ; interactive buffer management
+       ;;ibuffer         ; interactive buffer management
        undo              ; persistent, smarter undo for your inevitable mistakes
        vc                ; version-control and Emacs, sitting in a tree
 
        :term
-       eshell            ; the elisp shell that works everywhere
+       ;;eshell            ; the elisp shell that works everywhere
        ;;shell             ; simple shell REPL for Emacs
        ;;term              ; basic terminal emulator for Emacs
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
        syntax              ; tasing you for every semicolon you forget
-       (spell +flyspell) ; tasing you for misspelling mispelling
-       grammar           ; tasing grammar mistake every you make
+       ;;(spell +flyspell) ; tasing you for misspelling mispelling
+       ;;grammar           ; tasing grammar mistake every you make
 
        :tools
        ;;ansible
@@ -262,8 +260,8 @@ All the config files are generated from this Org file, to try and make its meani
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
-       (lsp +eglot)               ; M-x vscode
-       magit             ; a git porcelain for Emacs
+       lsp               ; M-x vscode
+       (magit +forge)             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        pass              ; password manager for nerds
        pdf               ; pdf enhancements
@@ -272,7 +270,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;taskrunner        ; taskrunner for all your projects
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
-       ;;tree-sitter       ; syntax and parsing, sitting in a tree...
+       tree-sitter       ; syntax and parsing, sitting in a tree...
        ;;upload            ; map local to remote projects via ssh/ftp
 
        :os
@@ -282,9 +280,9 @@ All the config files are generated from this Org file, to try and make its meani
        :lang
        ;;agda              ; types of types of types of types...
        ;;beancount         ; mind the GAAP
-       (cc +lsp)         ; C > C++ == 1
+       ;;(cc +lsp)         ; C > C++ == 1
        ;;clojure           ; java with a lisp
-       (common-lisp +lsp)       ; if you've seen one lisp, you've seen them all
+       ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
@@ -312,28 +310,28 @@ All the config files are generated from this Org file, to try and make its meani
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
        (julia +lsp)             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
-       (latex +lsp +latexmk)             ; writing papers in Emacs has never been so fun
+       (latex +latexmk +lsp)             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
        ;;lua               ; one-based indices? one-based indices
        markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
-       (nix +lsp)               ; I hereby declare "nix geht mehr!"
+       ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +jupyter +pandoc +pomodoro +dragndrop +roam2 +present +pretty)               ; organize your plain life in plain text
+       (org +roam2 +pretty +pomodoro)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
-       (python +lsp)            ; beautiful is better than ugly
+       (python +lsp +pyright +tree-sitter)            ; beautiful is better than ugly
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs
        ;;raku              ; the artist formerly known as perl6
        ;;rest              ; Emacs as a REST client
        ;;rst               ; ReST in peace
        ;;(ruby +rails)     ; 1.step {|i| p "Ruby is #{i.even? ? 'love' : 'life'}"}
-       ;;rust              ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
+       ;;(rust +lsp)       ; Fe2O3.unwrap().unwrap().unwrap().unwrap()
        ;;scala             ; java, but good
-       (scheme +guile +lsp)   ; a fully conniving family of lisps
+       ;;(scheme +guile)   ; a fully conniving family of lisps
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        ;;sml
        ;;solidity          ; do you need a blockchain? No.
@@ -344,7 +342,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;zig               ; C, but simpler
 
        :email
-       ;;(mu4e +org +gmail)
+       (mu4e +org +gmail)
        ;;notmuch
        ;;(wanderlust +gmail)
 
@@ -354,201 +352,142 @@ All the config files are generated from this Org file, to try and make its meani
        ;;everywhere        ; *leave* Emacs!? You must be joking
        ;;irc               ; how neckbeards socialize
        ;;(rss +org)        ; emacs as an RSS reader
-       twitter           ; twitter client https://twitter.com/vnought
+       ;;twitter           ; twitter client https://twitter.com/vnought
 
        :config
        ;;literate
        (default +bindings +smartparens))
-#+end_src
+#+END_SRC
 
-* General configuration
-** User information
-#+begin_src emacs-lisp
-(setq user-full-name "Kevin Kaiser"
-      user-mail-address "k8x1d@protonmail.ch")
-#+end_src
+* Configuration
+Initial background color (prevent white flash at start)
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'default-frame-alist '(background-color . "#282828"))
+#+END_SRC
 
-** Esthetics
-*** Transparency
-#+begin_src emacs-lisp
-  (unless (featurep 'pgtk)
-    (set-frame-parameter (selected-frame) 'alpha '(85 . 85))
-    (add-to-list 'default-frame-alist '(alpha . (85 . 85)))
-    (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-    (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-    ;; ;; Set transparency of emacs
-    (defun kk/transparency (value)
-      "Sets the transparency of the frame window. 0=transparent/100=opaque"
-      (interactive "nTransparency Value 0 - 100 opaque:")
-      (set-frame-parameter (selected-frame) 'alpha value)))
-
-  ;; For emacs pgtk >= 29
-  (when (featurep 'pgtk)
-    (if (version< emacs-version "29")
-        ;; initial transparency
-        (set-frame-parameter nil 'alpha-background 100)
-      (add-to-list 'default-frame-alist '(alpha-background . 100))
-
-      ;; function to change transparency
-      (defun kk/transparency (value)
-        "Sets the transparency of the frame window. 0=transparent/100=opaque"
-        (interactive "nTransparency Value 0 - 100 opaque:")
-        (set-frame-parameter (selected-frame) 'alpha-background value))))
-#+end_src
-
-*** Theme
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
-(package! solaire-mode :disable t) ;; cause problems with modus-themes https://github.com/protesilaos/modus-themes/issues/35
-(package! mixed-pitch)
-#+end_src
-
-#+begin_src emacs-lisp
-;;(use-package! emacs
-;;  :init
-;;  ;; Add all your customizations prior to loading the themes
-;;  (setq modus-themes-italic-constructs t
-;;        modus-themes-bold-constructs nil
-;;        modus-themes-region '(bg-only no-extend))
-;;  ;;(setq modus-themes-mixed-fonts t)
-;;  ;; Main typeface
-;;  (set-face-attribute 'default nil :family "JuliaMono" :height 120)
-;;  ;; Proportionately spaced typeface
-;;  (set-face-attribute 'variable-pitch nil :family "DejaVu Sans" :height 1.5)
-;;  ;; Monospaced typeface
-;;  (set-face-attribute 'fixed-pitch nil :family "JuliaMono" :height 1.0)
-;;  :config
-;;  (setq doom-theme 'modus-vivendi)
-;;  :hook
-;;  ;;(text-mode . variable-pitch-mode)
-;;  (text-mode . mixed-pitch-mode)
-;;  :bind ("<f5>" . modus-themes-toggle))
-
-(use-package! emacs
-  :init
-  ;; Main typeface
-  ;;(set-face-attribute 'default nil :family "JuliaMono" :height 120)
-  (set-face-attribute 'default nil :family "DejaVu Sans Mono" :height 120)
-  ;; Proportionately spaced typeface
-  (set-face-attribute 'variable-pitch nil :family "DejaVu Sans" :height 1.5)
-  ;; Monospaced typeface
-  ;;(set-face-attribute 'fixed-pitch nil :family "JuliaMono" :height 1.0)
-  (set-face-attribute 'fixed-pitch nil :family "DejaVu Sans Mono" :height 1.0)
-  :config
-  (setq doom-theme 'doom-gruvbox)
-  :hook
-  (text-mode . mixed-pitch-mode))
-#+end_src
-
-*** Lines numbers
-#+begin_src emacs-lisp
-(setq display-line-numbers-type t)
-#+end_src
-
-*** Dashboard splash image
-#+begin_src emacs-lisp
+Splash image
+#+BEGIN_SRC emacs-lisp
 (setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
-#+end_src
+#+END_SRC
 
-* Guix interaction
-#+begin_src scheme :tangle ~/.config/guix/manifests/doom-emacs.scm
-(specifications->manifest
- '(
-   ;;"emacs-next-pgtk"
-   ;;"emacs-pgtk-native-comp"
-   "emacs-native-comp"
+Theme
+#+BEGIN_SRC emacs-lisp
+(setq doom-theme 'doom-gruvbox)
+#+END_SRC
 
-   "font-juliamono"
-   "font-dejavu"
-   "font-hack"
-   "font-fira-sans"
-   "font-fira-code"
-   "font-fira-mono"
-   "font-iosevka"
-   "font-overpass"
+Line numbers
+#+BEGIN_SRC emacs-lisp
+(setq display-line-numbers-type t)
+#+END_SRC
 
-   "graphviz"
-
-   ;; vterm
-   "cmake"
-   "make"
-   "gcc-toolchain"
-   "libtool"
-   "perl"
-
-   ;; flycheck
-   "ispell"
-
-   ;; cc
-   "glslang"
-
-   ;; markdown
-   "markdown"
-
-   ;; sh
-   "shellcheck"
-
-   ;; python
-   "python-isort"
-   "python-nose"
-
-   ))
-
-#+end_src
-
-* Org
-** Configuration
-#+begin_src emacs-lisp
+Org directory
+#+BEGIN_SRC emacs-lisp
 (setq org-directory "~/org/")
-#+end_src
+#+END_SRC
 
-** Esthetics
-*** Bullets
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
-(package! org-superstar)
-#+end_src
+Identification
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "Kevin Kaiser"
+      user-mail-address "k8x1d@proton.me")
+#+END_SRC
 
-#+begin_src emacs-lisp
-(use-package! org-superstar
-  :hook (org-mode . org-superstar-mode)
+Fonts
+#+BEGIN_SRC emacs-lisp
+(setq doom-font (font-spec :family "JuliaMono" :size 16)
+      doom-variable-pitch-font (font-spec :family "FreeSans" :size 16))
+#+END_SRC
+
+Forge token
+#+BEGIN_SRC emacs-lisp
+(setq auth-sources '("~/.authinfo"))
+#+END_SRC
+
+Highlight whole selected line (everywhere)
+#+BEGIN_SRC emacs-lisp
+;;(add-hook 'after-init-hook 'global-hl-line-mode)
+#+END_SRC
+
+Mixed font
+#+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
+(package! mixed-pitch)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package! mixed-pitch
+  :hook
+  ;; If you want it in all text modes:
+  (text-mode . mixed-pitch-mode))
+#+END_SRC
+
+Latex support
+#+BEGIN_SRC emacs-lisp
+(setq reftex-default-bibliography "/home/k8x1d/Zotero/k8x1d.bib")
+(setq +latex-viewers '(pdf-tools))
+#+END_SRC
+
+Pdf dark mode
+#+BEGIN_SRC emacs-lisp
+(use-package! pdf-tools
+  :hook (pdf-view-mode . pdf-view-midnight-minor-mode))
+#+END_SRC
+
+Zotero support
+#+BEGIN_SRC emacs-lisp
+(setq! citar-bibliography '("/home/k8x1d/Zotero/k8x1d.bib"))
+(setq! citar-library-paths '("/home/k8x1d/Zotero/storage/")
+       citar-notes-paths '("/home/k8x1d/Zotero/notes/"))
+#+END_SRC
+
+Transparency
+#+BEGIN_SRC emacs-lisp
+;; For emacs < 29
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; ;; Set transparency of emacs
+(defun kk/transparency (value)
+  "Sets the transparency of the frame window. 0=transparent/100=opaque"
+  (interactive "nTransparency Value 0 - 100 opaque:")
+  (set-frame-parameter (selected-frame) 'alpha value))
+
+;;;; For emacs >= 29
+;;(set-frame-parameter nil 'alpha-background 80)
+;;(add-to-list 'default-frame-alist '(alpha-background . 80))
+;;
+;;;; function to change transparency
+;;(defun kk/transparency (value)
+;;  "Sets the transparency of the frame window. 0=transparent/100=opaque"
+;;  (interactive "nTransparency Value 0 - 100 opaque:")
+;;  (set-frame-parameter (selected-frame) 'alpha-background value))
+#+END_SRC
+
+Pomodoro customization
+#+BEGIN_SRC emacs-lisp
+(use-package! org-pomodoro
   :config
-  (setq org-superstar-remove-leading-stars t)
-  (setq org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
-#+end_src
+  (setq org-pomodoro-length 50)
+  (setq org-pomodoro-short-break-length 10)
+  (setq org-pomodoro-long-break-length 30))
+#+END_SRC
 
-#+RESULTS:
-
-* Coding
-** Julia support
-*** Lsp
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
-;;(package! lsp-julia)
-;;(package! eglot-jl)
-#+end_src
-
-#+begin_src emacs-lisp
-;;(setq lsp-julia-package-dir nil)
-;;(after! lsp-julia
-;;  (setq lsp-julia-default-environment "~/.julia/environments/v1.7"))
-
-(setq eglot-jl-language-server-project "~/.julia/environments/v1.7")
-(after! eglot-jl
-  (setq eglot-jl-language-server-project eglot-jl-base))
-
-#+end_src
-
-*** REPL
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
+* Julia support
+#+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
 (package! julia-repl :disable t)
 (package! julia-vterm)
-#+end_src
-#+begin_src emacs-lisp
+(package! ob-julia-vterm)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(after! lsp-julia
+  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
+
 (use-package! julia-vterm
-  :hook (julia-mode . julia-vterm-mode)
-  ;;:bind-keymap
-  ;;("C-<return>" . julia-vterm-send-region-or-current-line)
+  :hook
+  (julia-mode . julia-vterm-mode)
   :config
-  (setq julia-vterm-repl-program "/nix/var/nix/profiles/per-user/k8x1d/profile/bin/julia -t 4")
+  ;;(setq julia-vterm-repl-program "/usr/bin/julia -t 12")
   (map! :localleader
         :map julia-mode-map
         "'" #'julia-vterm-switch-to-repl-buffer
@@ -556,116 +495,29 @@ All the config files are generated from this Org file, to try and make its meani
         "b" #'julia-vterm-send-buffer
         "f" #'julia-vterm-send-include-buffer-file
         "d" #'julia-vterm-send-cd-to-buffer-directory))
-#+end_src
 
-*** Babel support
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
-(package! ob-julia-vterm)
-#+end_src
-#+begin_src emacs-lisp
 (use-package! ob-julia-vterm
   :config
   (add-to-list 'org-babel-load-languages '(julia-vterm . t))
   (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
 #+end_src
 
-** R support
-*** REPL
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
-(package! R-vterm
-  :recipe (:host gitlab :repo "oryp6/editors_set-up/r-vterm"))
-#+end_src
-#+begin_src emacs-lisp
-(use-package! R-vterm
-  :hook (ess-r-mode . R-vterm-mode)
-  :config
-  (map! :localleader
-        :map ess-r-mode-map
-        "'" #'R-vterm-switch-to-repl-buffer
-        "RET" #'R-vterm-send-region-or-current-line
-        "b" #'R-vterm-send-buffer
-        "f" #'R-vterm-send-include-buffer-file
-        "d" #'R-vterm-send-cd-to-buffer-directory))
-#+end_src
+* LanguageTool support
+TESTING CHECKER OPTION INSTEAD
+#+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
+(package! lsp-ltex)
+#+END_SRC
 
-** Latex support
-*** Default PDF viewer
-#+begin_src emacs-lisp
-(setq +latex-viewers '(pdf-tools))
-#+end_src
-** Zotero support
-*** Bibliography location
-#+begin_src emacs-lisp
-(setq! reftex-default-bibliography "~/Zotero/k8x1d.bib")
-(setq! bibtex-completion-bibliography '("~/Zotero/k8x1d.bib"))
-#+end_src
-
-*** PDF consultation
-#+begin_src emacs-lisp
-(setq! bibtex-completion-library-path '("~/Zotero/storage"))
-(map! :leader :desc "Open a PDF" "oz" #'ivy-bibtex)
-#+end_src
-
-** Pdf support
-#+begin_src emacs-lisp
-(use-package! pdf-tools
-  :hook (pdf-view-mode . pdf-view-midnight-minor-mode))
-#+end_src
-
-** Languagetools support
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
-;;(package! lsp-ltex)
-#+end_src
-
-#+begin_src emacs-lisp :tangle .doom.d/packages.el
-;;(package! lsp-ltex)
-(package! eglot-ltex
-  :recipe (:host github :repo "emacs-languagetool/eglot-ltex"))
-#+end_src
-
-#+begin_src emacs-lisp
-;;(use-package! lsp-ltex
-;;  :hook (LaTeX-mode . (lambda ()
-;;                        (require 'lsp-ltex)
-;;                        (lsp-deferred)))
-;;  :init
-;;  (setq lsp-ltex-version "15.2.0"))
-;;
-;;(defun kk/start-ltex ()
-;;  (interactive)
-;;  (require 'lsp-ltex)
-;;  (call-interactively #'lsp))
-#+end_src
-
-#+RESULTS:
-
-
-
-#+begin_src emacs-lisp
-(setq eglot-languagetool-server-path "~/Documents/Logiciels/editors_set-up/ltex-ls-15.2.0")
-
-(add-hook 'LaTeX-mode-hook
-          (lambda ()
-            (require 'eglot-ltex)
-            (call-interactively #'eglot)))
+#+BEGIN_SRC emacs-lisp
+(use-package! lsp-ltex
+  :hook (LaTeX-mode . (lambda ()
+                        (require 'lsp-ltex)
+                        (lsp-deferred)))
+  :init
+  (setq lsp-ltex-version "15.2.0"))
 
 (defun kk/start-ltex ()
   (interactive)
-  (require 'eglot-ltex)
-  (call-interactively #'eglot))
-  #+end_src
-
-
-** LSP configuration
-#+begin_src emacs-lisp
-(setq flycheck-checker-error-threshold 1000)
-;;(ispell-change-dictionary "en_US" t)
-(setq lsp-ui-sideline-show-code-actions t)
-#+end_src
-
-** Daemon mode
-#+begin_src emacs-lisp
-;;(setq inhibit-x-resources t)
-;;(setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
-;;(server-start)
+  (require 'lsp-ltex)
+  (call-interactively #'lsp))
 #+end_src

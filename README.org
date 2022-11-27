@@ -3,7 +3,7 @@
 #+author: k8x1d@proton.me
 
 #+attr_html: :width 30%;
-[[file:splash/doom-emacs-color.png]]
+[[file:.doom.d/splash/doom-emacs-color.png]]
 
 
 ** Aim(s)
