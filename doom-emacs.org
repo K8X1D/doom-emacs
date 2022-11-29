@@ -488,6 +488,19 @@ Remove auto-reformat table when change evil state
 (remove-hook 'org-mode-hook #'+org-enable-auto-reformat-tables-h)
 #+END_SRC
 
+Mixed font in text mode
+#+BEGIN_SRC emacs-lisp
+(add-hook! 'text-mode-hook #'mixed-pitch-mode)
+(add-hook! 'text-mode-hook #'solaire-mode)
+(setq mixed-pitch-variable-pitch-cursor nil)
+#+END_SRC
+
+Default browser
+#+BEGIN_SRC emacs-lisp
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "firefox")
+#+END_SRC
+
 * Julia support
 #+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
 (package! julia-repl :disable t)

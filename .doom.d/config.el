@@ -149,6 +149,10 @@
 
 (remove-hook 'org-mode-hook #'+org-enable-auto-reformat-tables-h)
 
+(add-hook! 'text-mode-hook #'mixed-pitch-mode)
+(add-hook! 'text-mode-hook #'solaire-mode)
+(setq mixed-pitch-variable-pitch-cursor nil)
+
 (after! lsp-julia
   (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
 
