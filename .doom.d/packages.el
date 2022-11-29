@@ -49,7 +49,7 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(package! mixed-pitch)
+;;(package! mixed-pitch)
 
 (package! julia-repl :disable t)
 (package! julia-vterm)

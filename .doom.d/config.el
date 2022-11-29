@@ -83,22 +83,28 @@
 
 (setq display-line-numbers-type t)
 
-(setq org-directory "~/org/")
+(setq org-directory "~/Dropbox/org/")
 
 (setq user-full-name "Kevin Kaiser"
       user-mail-address "k8x1d@proton.me")
 
-(setq doom-font (font-spec :family "JuliaMono" :size 16)
-      doom-variable-pitch-font (font-spec :family "FreeSans" :size 16))
+;;(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16)
+;;      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
+
+
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16 :weight 'normal)
+      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 20 :weight 'normal)
+      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
 
 (setq auth-sources '("~/.authinfo"))
 
 ;;(add-hook 'after-init-hook 'global-hl-line-mode)
 
-(use-package! mixed-pitch
-  :hook
-  ;; If you want it in all text modes:
-  (text-mode . mixed-pitch-mode))
+;;(use-package! mixed-pitch
+;;  :hook
+;;  ;; If you want it in all text modes:
+;;  (text-mode . mixed-pitch-mode))
 
 (setq reftex-default-bibliography "/home/k8x1d/Zotero/k8x1d.bib")
 (setq +latex-viewers '(pdf-tools))
@@ -132,11 +138,16 @@
 ;;  (interactive "nTransparency Value 0 - 100 opaque:")
 ;;  (set-frame-parameter (selected-frame) 'alpha-background value))
 
-(use-package! org-pomodoro
-  :config
-  (setq org-pomodoro-length 50)
-  (setq org-pomodoro-short-break-length 10)
-  (setq org-pomodoro-long-break-length 30))
+;; (use-package! org-pomodoro
+;;   :config
+;;   (setq org-pomodoro-length 50)
+;;   (setq org-pomodoro-short-break-length 10)
+;;   (setq org-pomodoro-long-break-length 30))
+(setq org-pomodoro-length 50)
+(setq org-pomodoro-short-break-length 10)
+(setq org-pomodoro-long-break-length 30)
+
+(remove-hook 'org-mode-hook #'+org-enable-auto-reformat-tables-h)
 
 (after! lsp-julia
   (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))

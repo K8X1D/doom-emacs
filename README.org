@@ -5,7 +5,6 @@
 #+attr_html: :width 30%;
 [[file:.doom.d/splash/doom-emacs-color.png]]
 
-
 ** Aim(s)
 TODO
 
