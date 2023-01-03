@@ -186,7 +186,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;layout            ; auie,ctsrnm is the superior home row
 
        :completion
-       (company +tng)           ; the ultimate code completion backend
+       (company +childframe)           ; the ultimate code completion backend
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
@@ -260,7 +260,7 @@ All the config files are generated from this Org file, to try and make its meani
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
-       lsp               ; M-x vscode
+       (lsp +eglot)               ; M-x vscode
        (magit +forge)             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        pass              ; password manager for nerds
@@ -308,7 +308,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;json              ; At least it ain't XML
        ;;(java +lsp)       ; the poster child for carpal tunnel syndrome
        ;;javascript        ; all(hope(abandon(ye(who(enter(here))))))
-       (julia +lsp)             ; a better, faster MATLAB
+       (julia +lsp +tree-sitter)             ; a better, faster MATLAB
        ;;kotlin            ; a better, slicker Java(Script)
        (latex +latexmk +lsp)             ; writing papers in Emacs has never been so fun
        ;;lean              ; for folks with too much to prove
@@ -318,7 +318,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +roam2 +pretty +pomodoro)               ; organize your plain life in plain text
+       (org +roam2 +pretty +pomodoro +present)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
@@ -365,14 +365,18 @@ Initial background color (prevent white flash at start)
 (add-to-list 'default-frame-alist '(background-color . "#282828"))
 #+END_SRC
 
-Splash image
+Splash image (based on THEME_VARIANT variable)
 #+BEGIN_SRC emacs-lisp
-(setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
+(if (string-equal (getenv "THEME_VARIANT") "Light")
+    (setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color2.png"))
+  (setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png")))
 #+END_SRC
 
-Theme
+Theme (based on THEME_VARIANT variable)
 #+BEGIN_SRC emacs-lisp
-(setq doom-theme 'doom-gruvbox)
+(if (string-equal (getenv "THEME_VARIANT") "Light")
+    (setq doom-theme 'doom-gruvbox-light)
+  (setq doom-theme 'doom-gruvbox))
 #+END_SRC
 
 Line numbers
@@ -382,7 +386,7 @@ Line numbers
 
 Org directory
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/Dropbox/org/")
+(setq org-directory "~/org")
 #+END_SRC
 
 Identification
@@ -445,19 +449,19 @@ Zotero support
        citar-notes-paths '("/home/k8x1d/Zotero/notes/"))
 #+END_SRC
 
-Transparency
+Transparency (use doom native function)
 #+BEGIN_SRC emacs-lisp
-;; For emacs < 29
-(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
-(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;;;;; For emacs < 29
+;;;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+;;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;;;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+;;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; ;; Set transparency of emacs
-(defun kk/transparency (value)
-  "Sets the transparency of the frame window. 0=transparent/100=opaque"
-  (interactive "nTransparency Value 0 - 100 opaque:")
-  (set-frame-parameter (selected-frame) 'alpha value))
+;;;; ;; Set transparency of emacs
+;;(defun kk/transparency (value)
+;;  "Sets the transparency of the frame window. 0=transparent/100=opaque"
+;;  (interactive "nTransparency Value 0 - 100 opaque:")
+;;  (set-frame-parameter (selected-frame) 'alpha value))
 
 ;;;; For emacs >= 29
 ;;(set-frame-parameter nil 'alpha-background 80)
@@ -478,6 +482,7 @@ Pomodoro customization
 ;;   (setq org-pomodoro-length 50)
 ;;   (setq org-pomodoro-short-break-length 10)
 ;;   (setq org-pomodoro-long-break-length 30))
+(setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
 (setq org-pomodoro-length 50)
 (setq org-pomodoro-short-break-length 10)
 (setq org-pomodoro-long-break-length 30)
@@ -503,49 +508,80 @@ Default browser
 
 * Julia support
 #+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
-(package! julia-repl :disable t)
-(package! julia-vterm)
-(package! ob-julia-vterm)
+;;(package! julia-repl :disable t)
+;;(package! julia-vterm)
+;;(package! ob-julia-vterm)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
-(after! lsp-julia
-  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
+;;(after! lsp-julia
+;;  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
 
-(use-package! julia-vterm
-  :hook
-  (julia-mode . julia-vterm-mode)
-  :config
-  ;;(setq julia-vterm-repl-program "/usr/bin/julia -t 12")
-  (map! :localleader
-        :map julia-mode-map
-        "'" #'julia-vterm-switch-to-repl-buffer
-        "RET" #'julia-vterm-send-region-or-current-line
-        "b" #'julia-vterm-send-buffer
-        "f" #'julia-vterm-send-include-buffer-file
-        "d" #'julia-vterm-send-cd-to-buffer-directory))
+(after! julia-repl
+  (julia-repl-set-terminal-backend 'vterm)
+  (setq vterm-kill-buffer-on-exit nil))
 
-(use-package! ob-julia-vterm
-  :config
-  (add-to-list 'org-babel-load-languages '(julia-vterm . t))
-  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+(setq eglot-jl-language-server-project "~/.julia/environments/v1.8")
+
+
+;;(use-package! julia-vterm
+;;  :hook
+;;  (julia-mode . julia-vterm-mode)
+;;  :config
+;;  ;;(setq julia-vterm-repl-program "/usr/bin/julia -t 12")
+;;  (map! :localleader
+;;        :map julia-mode-map
+;;        "'" #'julia-vterm-switch-to-repl-buffer
+;;        "RET" #'julia-vterm-send-region-or-current-line
+;;        "b" #'julia-vterm-send-buffer
+;;        "f" #'julia-vterm-send-include-buffer-file
+;;        "d" #'julia-vterm-send-cd-to-buffer-directory))
+;;
+;;(use-package! ob-julia-vterm
+;;  :config
+;;  (add-to-list 'org-babel-load-languages '(julia-vterm . t))
+;;  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
+;;  (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+;;  (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm)
+;;  )
 #+end_src
 
 * LanguageTool support
-#+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
-(package! lsp-ltex)
-#+END_SRC
+#+begin_src emacs-lisp :tangle .doom.d/packages.el
+;;(package! lsp-ltex)
+(package! eglot-ltex
+ :recipe (:host github
+           :repo "emacs-languagetool/eglot-ltex"))
+#+end_src
 
-#+BEGIN_SRC emacs-lisp
-(use-package! lsp-ltex
+#+begin_src emacs-lisp
+;;(use-package! lsp-ltex
+;;  :hook (LaTeX-mode . (lambda ()
+;;                        (require 'lsp-ltex)
+;;                        (lsp-deferred)))
+;;  :init
+;;  (setq lsp-ltex-version "15.2.0")
+;;  :config
+;;  (defun kk/start-ltex ()
+;;    (interactive)
+;;    (require 'lsp-ltex)
+;;    (call-interactively #'lsp))
+;;  )
+
+
+(use-package! eglot-ltex
   :hook (LaTeX-mode . (lambda ()
                         (require 'lsp-ltex)
                         (lsp-deferred)))
   :init
-  (setq lsp-ltex-version "15.2.0"))
+  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
+  :config
+  (defun kk/start-ltex ()
+    (interactive)
+    (require 'eglot-ltex)
+    (call-interactively #'eglot))
+  )
 
-(defun kk/start-ltex ()
-  (interactive)
-  (require 'lsp-ltex)
-  (call-interactively #'lsp))
+
+
 #+end_src

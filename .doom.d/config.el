@@ -77,13 +77,17 @@
 
 (add-to-list 'default-frame-alist '(background-color . "#282828"))
 
-(setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
+(if (string-equal (getenv "THEME_VARIANT") "Light")
+    (setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color2.png"))
+  (setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png")))
 
-(setq doom-theme 'doom-gruvbox)
+(if (string-equal (getenv "THEME_VARIANT") "Light")
+    (setq doom-theme 'doom-gruvbox-light)
+  (setq doom-theme 'doom-gruvbox))
 
 (setq display-line-numbers-type t)
 
-(setq org-directory "~/Dropbox/org/")
+(setq org-directory "~/org")
 
 (setq user-full-name "Kevin Kaiser"
       user-mail-address "k8x1d@proton.me")
@@ -116,17 +120,17 @@
 (setq! citar-library-paths '("/home/k8x1d/Zotero/storage/")
        citar-notes-paths '("/home/k8x1d/Zotero/notes/"))
 
-;; For emacs < 29
-(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
-(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;;;;; For emacs < 29
+;;;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+;;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;;;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+;;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-;; ;; Set transparency of emacs
-(defun kk/transparency (value)
-  "Sets the transparency of the frame window. 0=transparent/100=opaque"
-  (interactive "nTransparency Value 0 - 100 opaque:")
-  (set-frame-parameter (selected-frame) 'alpha value))
+;;;; ;; Set transparency of emacs
+;;(defun kk/transparency (value)
+;;  "Sets the transparency of the frame window. 0=transparent/100=opaque"
+;;  (interactive "nTransparency Value 0 - 100 opaque:")
+;;  (set-frame-parameter (selected-frame) 'alpha value))
 
 ;;;; For emacs >= 29
 ;;(set-frame-parameter nil 'alpha-background 80)
@@ -143,6 +147,7 @@
 ;;   (setq org-pomodoro-length 50)
 ;;   (setq org-pomodoro-short-break-length 10)
 ;;   (setq org-pomodoro-long-break-length 30))
+(setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
 (setq org-pomodoro-length 50)
 (setq org-pomodoro-short-break-length 10)
 (setq org-pomodoro-long-break-length 30)
@@ -153,35 +158,63 @@
 (add-hook! 'text-mode-hook #'solaire-mode)
 (setq mixed-pitch-variable-pitch-cursor nil)
 
-(after! lsp-julia
-  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "firefox")
 
-(use-package! julia-vterm
-  :hook
-  (julia-mode . julia-vterm-mode)
-  :config
-  ;;(setq julia-vterm-repl-program "/usr/bin/julia -t 12")
-  (map! :localleader
-        :map julia-mode-map
-        "'" #'julia-vterm-switch-to-repl-buffer
-        "RET" #'julia-vterm-send-region-or-current-line
-        "b" #'julia-vterm-send-buffer
-        "f" #'julia-vterm-send-include-buffer-file
-        "d" #'julia-vterm-send-cd-to-buffer-directory))
+;;(after! lsp-julia
+;;  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
 
-(use-package! ob-julia-vterm
-  :config
-  (add-to-list 'org-babel-load-languages '(julia-vterm . t))
-  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+(after! julia-repl
+  (julia-repl-set-terminal-backend 'vterm)
+  (setq vterm-kill-buffer-on-exit nil))
 
-(use-package! lsp-ltex
+(setq eglot-jl-language-server-project "~/.julia/environments/v1.8")
+
+
+;;(use-package! julia-vterm
+;;  :hook
+;;  (julia-mode . julia-vterm-mode)
+;;  :config
+;;  ;;(setq julia-vterm-repl-program "/usr/bin/julia -t 12")
+;;  (map! :localleader
+;;        :map julia-mode-map
+;;        "'" #'julia-vterm-switch-to-repl-buffer
+;;        "RET" #'julia-vterm-send-region-or-current-line
+;;        "b" #'julia-vterm-send-buffer
+;;        "f" #'julia-vterm-send-include-buffer-file
+;;        "d" #'julia-vterm-send-cd-to-buffer-directory))
+;;
+;;(use-package! ob-julia-vterm
+;;  :config
+;;  (add-to-list 'org-babel-load-languages '(julia-vterm . t))
+;;  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
+;;  (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+;;  (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm)
+;;  )
+
+;;(use-package! lsp-ltex
+;;  :hook (LaTeX-mode . (lambda ()
+;;                        (require 'lsp-ltex)
+;;                        (lsp-deferred)))
+;;  :init
+;;  (setq lsp-ltex-version "15.2.0")
+;;  :config
+;;  (defun kk/start-ltex ()
+;;    (interactive)
+;;    (require 'lsp-ltex)
+;;    (call-interactively #'lsp))
+;;  )
+
+
+(use-package! eglot-ltex
   :hook (LaTeX-mode . (lambda ()
                         (require 'lsp-ltex)
                         (lsp-deferred)))
   :init
-  (setq lsp-ltex-version "15.2.0"))
-
-(defun kk/start-ltex ()
-  (interactive)
-  (require 'lsp-ltex)
-  (call-interactively #'lsp))
+  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
+  :config
+  (defun kk/start-ltex ()
+    (interactive)
+    (require 'eglot-ltex)
+    (call-interactively #'eglot))
+  )
