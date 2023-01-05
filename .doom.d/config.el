@@ -77,13 +77,16 @@
 
 (add-to-list 'default-frame-alist '(background-color . "#282828"))
 
-(if (string-equal (getenv "THEME_VARIANT") "Light")
-    (setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color2.png"))
-  (setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png")))
+;;(setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
+;;(setq fancy-splash-image (concat doom-private-dir "splash/" "kid-flying-robots_neg.png"))
+(setq-default
+ +doom-dashboard-banner-dir (expand-file-name "splash/" doom-private-dir)
+ +doom-dashboard-banner-file "kid-flying-robots_neg.png"
+ +doom-dashboard-banner-padding '( 0 . 0 ))
 
-(if (string-equal (getenv "THEME_VARIANT") "Light")
-    (setq doom-theme 'doom-gruvbox-light)
-  (setq doom-theme 'doom-gruvbox))
+(setq doom-theme 'doom-gruvbox)
+;;(setq doom-theme 'doom-tokyo-night)
+;;(setq doom-theme 'doom-palenight)
 
 (setq display-line-numbers-type t)
 
@@ -96,10 +99,10 @@
 ;;      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
 
 
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16 :weight 'normal)
-      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 20 :weight 'normal)
-      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 16 :weight 'normal)
+      doom-big-font (font-spec :family "JetBrains Mono" :size 20 :weight 'normal)
+      doom-unicode-font (font-spec :family "JetBrains Mono" :size 14)
+      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16))
 
 (setq auth-sources '("~/.authinfo"))
 
@@ -121,8 +124,9 @@
        citar-notes-paths '("/home/k8x1d/Zotero/notes/"))
 
 ;;;;; For emacs < 29
-;;;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-;;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;;(setq doom/set-frame-opacity 95)
 ;;;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
 ;;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -141,6 +145,12 @@
 ;;  "Sets the transparency of the frame window. 0=transparent/100=opaque"
 ;;  (interactive "nTransparency Value 0 - 100 opaque:")
 ;;  (set-frame-parameter (selected-frame) 'alpha-background value))
+
+;;(if (eq window-system 'pgtk)
+;;    (set-frame-parameter nil 'alpha-background 80))
+;;
+;;(if (eq window-system 'pgtk)
+;;    (add-to-list 'default-frame-alist '(alpha-background . 80)))
 
 ;; (use-package! org-pomodoro
 ;;   :config
@@ -161,60 +171,57 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "firefox")
 
+(use-package! julia-vterm
+  :hook
+  (julia-mode . julia-vterm-mode)
+  :config
+  ;;(setq julia-vterm-repl-program "/usr/bin/julia -t 12")
+  (map! :localleader
+        :map julia-mode-map
+        "'" #'julia-vterm-switch-to-repl-buffer
+        "RET" #'julia-vterm-send-region-or-current-line
+        "b" #'julia-vterm-send-buffer
+        "f" #'julia-vterm-send-include-buffer-file
+        "d" #'julia-vterm-send-cd-to-buffer-directory))
+
+(use-package! ob-julia-vterm
+  :config
+  (add-to-list 'org-babel-load-languages '(julia-vterm . t))
+  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
+  (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
+  (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm)
+  )
+
+;;(after! julia-repl
+;;  (julia-repl-set-terminal-backend 'vterm)
+;;  (setq vterm-kill-buffer-on-exit nil))
+
 ;;(after! lsp-julia
 ;;  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
+;;;;(setq eglot-jl-language-server-project "~/.julia/environments/v1.8")
 
-(after! julia-repl
-  (julia-repl-set-terminal-backend 'vterm)
-  (setq vterm-kill-buffer-on-exit nil))
-
-(setq eglot-jl-language-server-project "~/.julia/environments/v1.8")
-
-
-;;(use-package! julia-vterm
-;;  :hook
-;;  (julia-mode . julia-vterm-mode)
-;;  :config
-;;  ;;(setq julia-vterm-repl-program "/usr/bin/julia -t 12")
-;;  (map! :localleader
-;;        :map julia-mode-map
-;;        "'" #'julia-vterm-switch-to-repl-buffer
-;;        "RET" #'julia-vterm-send-region-or-current-line
-;;        "b" #'julia-vterm-send-buffer
-;;        "f" #'julia-vterm-send-include-buffer-file
-;;        "d" #'julia-vterm-send-cd-to-buffer-directory))
-;;
-;;(use-package! ob-julia-vterm
-;;  :config
-;;  (add-to-list 'org-babel-load-languages '(julia-vterm . t))
-;;  (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages)
-;;  (defalias 'org-babel-execute:julia 'org-babel-execute:julia-vterm)
-;;  (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm)
-;;  )
-
-;;(use-package! lsp-ltex
-;;  :hook (LaTeX-mode . (lambda ()
-;;                        (require 'lsp-ltex)
-;;                        (lsp-deferred)))
-;;  :init
-;;  (setq lsp-ltex-version "15.2.0")
-;;  :config
-;;  (defun kk/start-ltex ()
-;;    (interactive)
-;;    (require 'lsp-ltex)
-;;    (call-interactively #'lsp))
-;;  )
-
-
-(use-package! eglot-ltex
+(use-package! lsp-ltex
   :hook (LaTeX-mode . (lambda ()
                         (require 'lsp-ltex)
                         (lsp-deferred)))
   :init
-  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
+  (setq lsp-ltex-version "15.2.0")
   :config
   (defun kk/start-ltex ()
     (interactive)
-    (require 'eglot-ltex)
-    (call-interactively #'eglot))
+    (require 'lsp-ltex)
+    (call-interactively #'lsp))
   )
+
+;;(use-package! eglot-ltex
+;;  :hook (LaTeX-mode . (lambda ()
+;;                        (require 'lsp-ltex)
+;;                        (lsp-deferred)))
+;;  :init
+;;  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
+;;  :config
+;;  (defun kk/start-ltex ()
+;;    (interactive)
+;;    (require 'eglot-ltex)
+;;    (call-interactively #'eglot))
+;;  )
