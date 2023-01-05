@@ -51,11 +51,11 @@
 
 ;;(package! mixed-pitch)
 
-;;(package! julia-repl :disable t)
-;;(package! julia-vterm)
-;;(package! ob-julia-vterm)
+(package! julia-repl :disable t)
+(package! julia-vterm)
+(package! ob-julia-vterm)
 
-;;(package! lsp-ltex)
-(package! eglot-ltex
- :recipe (:host github
-           :repo "emacs-languagetool/eglot-ltex"))
+(package! lsp-ltex)
+;;(package! eglot-ltex
+;; :recipe (:host github
+;;           :repo "emacs-languagetool/eglot-ltex"))
