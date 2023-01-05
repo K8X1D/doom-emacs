@@ -152,11 +152,6 @@
 ;;(if (eq window-system 'pgtk)
 ;;    (add-to-list 'default-frame-alist '(alpha-background . 80)))
 
-;; (use-package! org-pomodoro
-;;   :config
-;;   (setq org-pomodoro-length 50)
-;;   (setq org-pomodoro-short-break-length 10)
-;;   (setq org-pomodoro-long-break-length 30))
 (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
 (setq org-pomodoro-length 50)
 (setq org-pomodoro-short-break-length 10)
