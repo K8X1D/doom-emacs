@@ -44,7 +44,7 @@
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
-       treemacs          ; a project drawer, like neotree but cooler
+       (treemacs +lsp)          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        (vc-gutter +pretty) ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
@@ -67,7 +67,7 @@
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       (dired +icons +dirvish)             ; making dired pretty [functional]
+       (dired +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        (ibuffer +icons)          ; interactive buffer management
        undo              ; persistent, smarter undo for your inevitable mistakes
@@ -95,7 +95,7 @@
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
-       (lsp)               ; M-x vscode
+       (lsp +eglot)               ; M-x vscode
        (magit +forge)             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        pass              ; password manager for nerds
@@ -128,7 +128,7 @@
        ;;elm               ; care for a cup of TEA?
        emacs-lisp        ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
-       (ess +lsp)               ; emacs speaks statistics
+       (ess +lsp +tree-sitter)               ; emacs speaks statistics
        ;;factor
        ;;faust             ; dsp, but you get to keep your soul
        ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)

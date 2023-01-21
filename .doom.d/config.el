@@ -77,12 +77,15 @@
 
 (add-to-list 'default-frame-alist '(background-color . "#282828"))
 
-;;(setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
-;;(setq fancy-splash-image (concat doom-private-dir "splash/" "kid-flying-robots_neg.png"))
-(setq-default
- +doom-dashboard-banner-dir (expand-file-name "splash/" doom-private-dir)
- +doom-dashboard-banner-file "kid-flying-robots_neg.png"
- +doom-dashboard-banner-padding '( 0 . 0 ))
+  ;;(setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
+  ;;(setq fancy-splash-image (concat doom-private-dir "splash/" "kid-flying-robots_neg.png"))
+  (setq-default
+   +doom-dashboard-banner-dir (expand-file-name "splash/" doom-private-dir)
+   ;;+doom-dashboard-banner-file "kid-flying-robots_neg.png"
+   +doom-dashboard-banner-file "doom-emacs-color.png"
+  ;; +doom-dashboard-banner-padding '( 0 . 0 ))
+   )
+;;(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
 (setq doom-theme 'doom-gruvbox)
 ;;(setq doom-theme 'doom-tokyo-night)
@@ -99,19 +102,14 @@
 ;;      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
 
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 16 :weight 'normal)
-      doom-big-font (font-spec :family "JetBrains Mono" :size 20 :weight 'normal)
-      doom-unicode-font (font-spec :family "JetBrains Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16))
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16 :weight 'normal)
+      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 20 :weight 'normal)
+      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
 
 (setq auth-sources '("~/.authinfo"))
 
 ;;(add-hook 'after-init-hook 'global-hl-line-mode)
-
-;;(use-package! mixed-pitch
-;;  :hook
-;;  ;; If you want it in all text modes:
-;;  (text-mode . mixed-pitch-mode))
 
 (setq reftex-default-bibliography "/home/k8x1d/Zotero/k8x1d.bib")
 (setq +latex-viewers '(pdf-tools))
@@ -146,16 +144,19 @@
 ;;  (interactive "nTransparency Value 0 - 100 opaque:")
 ;;  (set-frame-parameter (selected-frame) 'alpha-background value))
 
-;;(if (eq window-system 'pgtk)
-;;    (set-frame-parameter nil 'alpha-background 80))
-;;
-;;(if (eq window-system 'pgtk)
-;;    (add-to-list 'default-frame-alist '(alpha-background . 80)))
+(if (eq window-system 'pgtk)
+    (set-frame-parameter nil 'alpha-background 80))
+
+(if (eq window-system 'pgtk)
+    (add-to-list 'default-frame-alist '(alpha-background . 80)))
 
 (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
 (setq org-pomodoro-length 50)
 (setq org-pomodoro-short-break-length 10)
 (setq org-pomodoro-long-break-length 30)
+
+(if (< emacs-major-version 29) nil
+    (add-hook 'after-init-hook 'pixel-scroll-precision-mode))
 
 (remove-hook 'org-mode-hook #'+org-enable-auto-reformat-tables-h)
 
@@ -165,6 +166,21 @@
 
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "firefox")
+
+(setq tab-bar-show nil)
+
+(if (eq window-system 'pgtk)
+    (setq treemacs-read-string-input 'from-minibuffer))
+
+;;  (with-eval-after-load "org"
+;;    (set-face-attribute 'org-todo nil :background  "#b8bb26" :foreground "#282828")
+;;    (set-face-attribute 'org-done nil :background  "#a89984" :foreground "#282828")
+;;  )
+
+(use-package! org-modern
+  :hook
+  '((org-mode . org-modern-mode)
+    (org-agenda-finalize .org-modern-agenda)))
 
 (use-package! julia-vterm
   :hook
@@ -195,18 +211,19 @@
 ;;  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
 ;;;;(setq eglot-jl-language-server-project "~/.julia/environments/v1.8")
 
-(use-package! lsp-ltex
-  :hook (LaTeX-mode . (lambda ()
-                        (require 'lsp-ltex)
-                        (lsp-deferred)))
-  :init
-  (setq lsp-ltex-version "15.2.0")
-  :config
-  (defun kk/start-ltex ()
-    (interactive)
-    (require 'lsp-ltex)
-    (call-interactively #'lsp))
-  )
+;;(use-package! lsp-ltex
+;;  ;; Cause slow down...
+;;  ;;:hook (LaTeX-mode . (lambda ()
+;;  ;;                      (require 'lsp-ltex)
+;;  ;;                      (lsp-deferred)))
+;;  :init
+;;  (setq lsp-ltex-version "15.2.0")
+;;  :config
+;;  (defun kk/start-ltex ()
+;;    (interactive)
+;;    (require 'lsp-ltex)
+;;    (call-interactively #'lsp))
+;;  )
 
 ;;(use-package! eglot-ltex
 ;;  :hook (LaTeX-mode . (lambda ()

@@ -49,13 +49,13 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-;;(package! mixed-pitch)
+(package! org-modern)
 
 (package! julia-repl :disable t)
 (package! julia-vterm)
 (package! ob-julia-vterm)
 
-(package! lsp-ltex)
+;;(package! lsp-ltex)
 ;;(package! eglot-ltex
 ;; :recipe (:host github
 ;;           :repo "emacs-languagetool/eglot-ltex"))

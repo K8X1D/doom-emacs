@@ -1,6 +1,6 @@
 :DOC-CONFIG:
 # Tangle by default to config.el, which is the most common case
-#+PROPERTY: header-args :mkdirp yes :comments no :tangle .doom.d/config.el
+#+PROPERTY: header-args :mkdirp yes :comments no :tangle .doom.d/config.el :results none
 #+STARTUP: fold
 :END:
 
@@ -209,7 +209,7 @@ All the config files are generated from this Org file, to try and make its meani
        ophints           ; highlight the region an operation acts on
        (popup +defaults)   ; tame sudden yet inevitable temporary windows
        ;;tabs              ; a tab bar for Emacs
-       treemacs          ; a project drawer, like neotree but cooler
+       (treemacs +lsp)          ; a project drawer, like neotree but cooler
        ;;unicode           ; extended unicode support for various languages
        (vc-gutter +pretty) ; vcs diff in the fringe
        vi-tilde-fringe   ; fringe tildes to mark beyond EOB
@@ -232,7 +232,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;word-wrap         ; soft wrapping with language-aware indent
 
        :emacs
-       (dired +icons +dirvish)             ; making dired pretty [functional]
+       (dired +icons)             ; making dired pretty [functional]
        electric          ; smarter, keyword-based electric-indent
        (ibuffer +icons)          ; interactive buffer management
        undo              ; persistent, smarter undo for your inevitable mistakes
@@ -260,7 +260,7 @@ All the config files are generated from this Org file, to try and make its meani
        (eval +overlay)     ; run code, run (also, repls)
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
-       (lsp)               ; M-x vscode
+       (lsp +eglot)               ; M-x vscode
        (magit +forge)             ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        pass              ; password manager for nerds
@@ -293,7 +293,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;elm               ; care for a cup of TEA?
        emacs-lisp        ; drown in parentheses
        ;;erlang            ; an elegant language for a more civilized age
-       (ess +lsp)               ; emacs speaks statistics
+       (ess +lsp +tree-sitter)               ; emacs speaks statistics
        ;;factor
        ;;faust             ; dsp, but you get to keep your soul
        ;;fortran           ; in FORTRAN, GOD is REAL (unless declared INTEGER)
@@ -318,7 +318,7 @@ All the config files are generated from this Org file, to try and make its meani
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
-       (org +roam2 +pretty +pomodoro +present)               ; organize your plain life in plain text
+       (org +roam2 +pomodoro +present)               ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;purescript        ; javascript, but functional
@@ -365,14 +365,17 @@ Initial background color (prevent white flash at start)
 (add-to-list 'default-frame-alist '(background-color . "#282828"))
 #+END_SRC
 
-Splash image (based on THEME_VARIANT variable)
+Change splash image and reduce dashboard to it
 #+BEGIN_SRC emacs-lisp
-;;(setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
-;;(setq fancy-splash-image (concat doom-private-dir "splash/" "kid-flying-robots_neg.png"))
-(setq-default
- +doom-dashboard-banner-dir (expand-file-name "splash/" doom-private-dir)
- +doom-dashboard-banner-file "kid-flying-robots_neg.png"
- +doom-dashboard-banner-padding '( 0 . 0 ))
+  ;;(setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
+  ;;(setq fancy-splash-image (concat doom-private-dir "splash/" "kid-flying-robots_neg.png"))
+  (setq-default
+   +doom-dashboard-banner-dir (expand-file-name "splash/" doom-private-dir)
+   ;;+doom-dashboard-banner-file "kid-flying-robots_neg.png"
+   +doom-dashboard-banner-file "doom-emacs-color.png"
+  ;; +doom-dashboard-banner-padding '( 0 . 0 ))
+   )
+;;(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 #+END_SRC
 
 Theme (based on THEME_VARIANT variable)
@@ -404,10 +407,10 @@ Fonts
 ;;      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
 
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 16 :weight 'normal)
-      doom-big-font (font-spec :family "JetBrains Mono" :size 20 :weight 'normal)
-      doom-unicode-font (font-spec :family "JetBrains Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "Iosevka Aile" :size 16))
+(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16 :weight 'normal)
+      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 20 :weight 'normal)
+      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
 
 #+END_SRC
 
@@ -419,18 +422,6 @@ Forge token
 Highlight whole selected line (everywhere)
 #+BEGIN_SRC emacs-lisp
 ;;(add-hook 'after-init-hook 'global-hl-line-mode)
-#+END_SRC
-
-Mixed font
-#+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
-;;(package! mixed-pitch)
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp
-;;(use-package! mixed-pitch
-;;  :hook
-;;  ;; If you want it in all text modes:
-;;  (text-mode . mixed-pitch-mode))
 #+END_SRC
 
 Latex support
@@ -477,11 +468,11 @@ Transparency (use doom native function)
 ;;  (interactive "nTransparency Value 0 - 100 opaque:")
 ;;  (set-frame-parameter (selected-frame) 'alpha-background value))
 
-;;(if (eq window-system 'pgtk)
-;;    (set-frame-parameter nil 'alpha-background 80))
-;;
-;;(if (eq window-system 'pgtk)
-;;    (add-to-list 'default-frame-alist '(alpha-background . 80)))
+(if (eq window-system 'pgtk)
+    (set-frame-parameter nil 'alpha-background 80))
+
+(if (eq window-system 'pgtk)
+    (add-to-list 'default-frame-alist '(alpha-background . 80)))
 
 #+END_SRC
 
@@ -491,6 +482,12 @@ Pomodoro customization
 (setq org-pomodoro-length 50)
 (setq org-pomodoro-short-break-length 10)
 (setq org-pomodoro-long-break-length 30)
+#+END_SRC
+
+Pixel precision scrolling (if emacs >= 29)
+#+BEGIN_SRC emacs-lisp
+(if (< emacs-major-version 29) nil
+    (add-hook 'after-init-hook 'pixel-scroll-precision-mode))
 #+END_SRC
 
 Remove auto-reformat table when change evil state
@@ -509,6 +506,38 @@ Default browser
 #+BEGIN_SRC emacs-lisp
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "firefox")
+#+END_SRC
+
+Ensure that tabs are hidden
+#+BEGIN_SRC emacs-lisp
+(setq tab-bar-show nil)
+#+END_SRC
+
+Don't use posframe for treemacs when pgtk
+(see https://github.com/Alexander-Miller/treemacs/issues/242)
+#+BEGIN_SRC emacs-lisp
+(if (eq window-system 'pgtk)
+    (setq treemacs-read-string-input 'from-minibuffer))
+#+END_SRC
+
+Adjust todo colors
+#+BEGIN_SRC emacs-lisp
+;;  (with-eval-after-load "org"
+;;    (set-face-attribute 'org-todo nil :background  "#b8bb26" :foreground "#282828")
+;;    (set-face-attribute 'org-done nil :background  "#a89984" :foreground "#282828")
+;;  )
+#+END_SRC
+
+Prettify org
+#+BEGIN_SRC emacs-lisp :tangle .doom.d/packages.el
+(package! org-modern)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package! org-modern
+  :hook
+  '((org-mode . org-modern-mode)
+    (org-agenda-finalize .org-modern-agenda)))
 #+END_SRC
 
 * Julia support
@@ -542,55 +571,24 @@ julia-vterm version
   )
 #+END_SRC
 
-julia-repl version
-#+BEGIN_SRC emacs-lisp
-;;(after! julia-repl
-;;  (julia-repl-set-terminal-backend 'vterm)
-;;  (setq vterm-kill-buffer-on-exit nil))
-#+END_SRC
-
-LSP
-#+BEGIN_SRC emacs-lisp
-;;(after! lsp-julia
-;;  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
-;;;;(setq eglot-jl-language-server-project "~/.julia/environments/v1.8")
-#+END_SRC
-
 * LanguageTool support
 #+begin_src emacs-lisp :tangle .doom.d/packages.el
-(package! lsp-ltex)
-;;(package! eglot-ltex
-;; :recipe (:host github
-;;           :repo "emacs-languagetool/eglot-ltex"))
+(package! eglot-ltex
+ :recipe (:host github
+           :repo "emacs-languagetool/eglot-ltex"))
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package! lsp-ltex
+(use-package! eglot-ltex
   :hook (LaTeX-mode . (lambda ()
                         (require 'lsp-ltex)
                         (lsp-deferred)))
   :init
-  (setq lsp-ltex-version "15.2.0")
+  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
   :config
   (defun kk/start-ltex ()
     (interactive)
-    (require 'lsp-ltex)
-    (call-interactively #'lsp))
+    (require 'eglot-ltex)
+    (call-interactively #'eglot))
   )
-#+end_src
-
-
-#+begin_src emacs-lisp
-;;(use-package! eglot-ltex
-;;  :hook (LaTeX-mode . (lambda ()
-;;                        (require 'lsp-ltex)
-;;                        (lsp-deferred)))
-;;  :init
-;;  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
-;;  :config
-;;  (defun kk/start-ltex ()
-;;    (interactive)
-;;    (require 'eglot-ltex)
-;;    (call-interactively #'eglot))
-;;  )
 #+end_src
