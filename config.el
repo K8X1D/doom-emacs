@@ -77,88 +77,69 @@
 
 (add-to-list 'default-frame-alist '(background-color . "#282828"))
 
-  ;;(setq fancy-splash-image (concat doom-private-dir "splash/" "doom-emacs-color.png"))
-  ;;(setq fancy-splash-image (concat doom-private-dir "splash/" "kid-flying-robots_neg.png"))
+;; Adjust splash image
   (setq-default
    +doom-dashboard-banner-dir (expand-file-name "splash/" doom-private-dir)
-   ;;+doom-dashboard-banner-file "kid-flying-robots_neg.png"
    +doom-dashboard-banner-file "doom-emacs-color.png"
-  ;; +doom-dashboard-banner-padding '( 0 . 0 ))
    )
-;;(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
 
+;; Esthetics
 (setq doom-theme 'doom-gruvbox)
-;;(setq doom-theme 'doom-tokyo-night)
-;;(setq doom-theme 'doom-palenight)
-
 (setq display-line-numbers-type t)
-
-(setq org-directory "~/org")
-
-(setq user-full-name "Kevin Kaiser"
-      user-mail-address "k8x1d@proton.me")
-
-;;(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16)
-;;      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
-
-
 (setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16 :weight 'normal)
       doom-big-font (font-spec :family "DejaVu Sans Mono" :size 20 :weight 'normal)
       doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
       doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
+(if (< emacs-major-version 29) nil
+    (add-hook 'after-init-hook 'pixel-scroll-precision-mode))
 
+;; Frames opacity
+(if (eq window-system 'pgtk)
+    (set-frame-parameter nil 'alpha-background 80)
+  (set-frame-parameter nil 'alpha 90))
+
+(if (eq window-system 'pgtk)
+    (add-to-list 'default-frame-alist '(alpha-background . 80))
+    (add-to-list 'default-frame-alist '(alpha . 90)))
+
+(setq tab-bar-show nil) ;; Ensure that tab don't show
+
+;;; Org ;;
+(setq org-directory "~/org")
+(remove-hook 'org-mode-hook #'+org-enable-auto-reformat-tables-h) ;; stop autoreformating for tables
+
+;; hide emphasis markers
+(setq! org-hide-emphasis-markers t
+       org-appear-autoemphasis t
+       org-appear-autolinks t)
+(add-hook! 'org-mode-hook 'org-appear-mode)
+
+;; Personal information
+(setq user-full-name "Kevin Kaiser"
+      user-mail-address "k8x1d@proton.me")
+
+
+;; Authorization file
 (setq auth-sources '("~/.authinfo"))
 
-;;(add-hook 'after-init-hook 'global-hl-line-mode)
-
+;;; Writing support
 (setq reftex-default-bibliography "/home/k8x1d/Zotero/k8x1d.bib")
 (setq +latex-viewers '(pdf-tools))
 
 (use-package! pdf-tools
   :hook (pdf-view-mode . pdf-view-midnight-minor-mode))
 
-(setq! citar-bibliography '("/home/k8x1d/Zotero/k8x1d.bib"))
-(setq! citar-library-paths '("/home/k8x1d/Zotero/storage/")
+(setq! citar-bibliography '("/home/k8x1d/Zotero/k8x1d.bib")
+       citar-library-paths '("/home/k8x1d/Zotero/storage/")
        citar-notes-paths '("/home/k8x1d/Zotero/notes/"))
 
-;;;;; For emacs < 29
-;;(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-;;(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
-;;(setq doom/set-frame-opacity 95)
-;;;(set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-;;;(add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-;;;; ;; Set transparency of emacs
-;;(defun kk/transparency (value)
-;;  "Sets the transparency of the frame window. 0=transparent/100=opaque"
-;;  (interactive "nTransparency Value 0 - 100 opaque:")
-;;  (set-frame-parameter (selected-frame) 'alpha value))
-
-;;;; For emacs >= 29
-;;(set-frame-parameter nil 'alpha-background 80)
-;;(add-to-list 'default-frame-alist '(alpha-background . 80))
-;;
-;;;; function to change transparency
-;;(defun kk/transparency (value)
-;;  "Sets the transparency of the frame window. 0=transparent/100=opaque"
-;;  (interactive "nTransparency Value 0 - 100 opaque:")
-;;  (set-frame-parameter (selected-frame) 'alpha-background value))
-
-(if (eq window-system 'pgtk)
-    (set-frame-parameter nil 'alpha-background 80))
-
-(if (eq window-system 'pgtk)
-    (add-to-list 'default-frame-alist '(alpha-background . 80)))
-
+;; Pomodoro configuration
 (setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
 (setq org-pomodoro-length 50)
 (setq org-pomodoro-short-break-length 10)
 (setq org-pomodoro-long-break-length 30)
 
-(if (< emacs-major-version 29) nil
-    (add-hook 'after-init-hook 'pixel-scroll-precision-mode))
 
-(remove-hook 'org-mode-hook #'+org-enable-auto-reformat-tables-h)
 
 (add-hook! 'text-mode-hook #'mixed-pitch-mode)
 (add-hook! 'text-mode-hook #'solaire-mode)
@@ -167,21 +148,12 @@
 (setq browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "firefox")
 
-(setq tab-bar-show nil)
 
 (if (eq window-system 'pgtk)
     (setq treemacs-read-string-input 'from-minibuffer))
 
-;;  (with-eval-after-load "org"
-;;    (set-face-attribute 'org-todo nil :background  "#b8bb26" :foreground "#282828")
-;;    (set-face-attribute 'org-done nil :background  "#a89984" :foreground "#282828")
-;;  )
 
-(use-package! org-modern
-  :hook
-  '((org-mode . org-modern-mode)
-    (org-agenda-finalize .org-modern-agenda)))
-
+;;; Julia (better) support
 (use-package! julia-vterm
   :hook
   (julia-mode . julia-vterm-mode)
@@ -203,10 +175,23 @@
   (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm)
   )
 
+
+
+;;; Languagetool support
+;; To set language, add the following to file been edited
+;; -  BibTEX: Same as LATEX
+;; -  LATEX: % LTeX: SETTINGS
+;; -  Markdown: One of the following:
+;; -      <!-- LTeX: SETTINGS -->
+;; -      [comment]: <> "LTeX: SETTINGS"
+;; -  Org: # LTeX: SETTINGS
+;; -  reStructuredText: .. LTeX: SETTINGS
+;; -  R Sweave: Same as LATEX
+;; -  XHTML: No support for magic comments
+;; -  Programming languages: LTeX: SETTINGS inside a line comment or a single-line block comment
+;; see https://valentjn.github.io/ltex/advanced-usage.html
+
 (use-package! eglot-ltex
-  :hook (LaTeX-mode . (lambda ()
-                        (require 'lsp-ltex)
-                        (lsp-deferred)))
   :init
   (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
   :config
@@ -215,3 +200,13 @@
     (require 'eglot-ltex)
     (call-interactively #'eglot))
   )
+
+
+
+;;; Helper funcitons
+;; test if pgtk
+  (defun k8x1d/test-pgtk ()
+    (interactive)
+    (if (eq window-system 'pgtk)
+        (print "yes")
+      (print "no")))
