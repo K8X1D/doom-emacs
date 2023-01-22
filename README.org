@@ -19,6 +19,15 @@ For great splash images, see [[https://gitlab.com/zzamboni/dot-doom/-/tree/maste
 For great icons, see https://github.com/eccentric-j/doom-icon
 
 ** Deployement
+Set-up with guix
+#+begin_src shell :results none
+guix pull --allow-downgrades --channels=channels.scm
+GUIX_EXTRA_PROFILES=$HOME/.guix-extra-profiles
+mkdir -p "$GUIX_EXTRA_PROFILES"/doom-emacs
+guix package --profile=$HOME/.guix-extra-profiles/doom-emacs/doom-emacs
+guix package --manifest=manifest.scm --profile="$GUIX_EXTRA_PROFILES"/doom-emacs/doom-emacs
+#+end_src
+
 
 #+begin_src shell :results none
 ln -s $PWD/doom-emacs.desktop ~/.local/share/applications/doom-emacs.desktop
