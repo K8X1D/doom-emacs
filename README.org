@@ -22,6 +22,7 @@ For great icons, see https://github.com/eccentric-j/doom-icon
 
 #+begin_src shell :results none
 ln -s $PWD/doom-emacs.desktop ~/.local/share/applications/doom-emacs.desktop
+ln -s $PWD/icons/cute-demon.png $HOME/.local/share/icons/cute-demon.png
 mkdir $HOME/.doom.d
 ln -s $PWD/*.el ~/.doom.d/
 ln -s $PWD/splash ~/.doom.d/
