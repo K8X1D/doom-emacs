@@ -49,12 +49,15 @@
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
 
-(package! org-modern)
-
+;;; Julia
 (package! julia-repl :disable t)
 (package! julia-vterm)
 (package! ob-julia-vterm)
 
+;;; Languagetool for latex, org, markdown,...
 (package! eglot-ltex
  :recipe (:host github
            :repo "emacs-languagetool/eglot-ltex"))
+
+;;; Guix interface
+(package! guix)
