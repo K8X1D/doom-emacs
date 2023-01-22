@@ -203,37 +203,15 @@
   (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm)
   )
 
-;;(after! julia-repl
-;;  (julia-repl-set-terminal-backend 'vterm)
-;;  (setq vterm-kill-buffer-on-exit nil))
-
-;;(after! lsp-julia
-;;  (setq lsp-julia-default-environment "~/.julia/environments/v1.8"))
-;;;;(setq eglot-jl-language-server-project "~/.julia/environments/v1.8")
-
-;;(use-package! lsp-ltex
-;;  ;; Cause slow down...
-;;  ;;:hook (LaTeX-mode . (lambda ()
-;;  ;;                      (require 'lsp-ltex)
-;;  ;;                      (lsp-deferred)))
-;;  :init
-;;  (setq lsp-ltex-version "15.2.0")
-;;  :config
-;;  (defun kk/start-ltex ()
-;;    (interactive)
-;;    (require 'lsp-ltex)
-;;    (call-interactively #'lsp))
-;;  )
-
-;;(use-package! eglot-ltex
-;;  :hook (LaTeX-mode . (lambda ()
-;;                        (require 'lsp-ltex)
-;;                        (lsp-deferred)))
-;;  :init
-;;  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
-;;  :config
-;;  (defun kk/start-ltex ()
-;;    (interactive)
-;;    (require 'eglot-ltex)
-;;    (call-interactively #'eglot))
-;;  )
+(use-package! eglot-ltex
+  :hook (LaTeX-mode . (lambda ()
+                        (require 'lsp-ltex)
+                        (lsp-deferred)))
+  :init
+  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
+  :config
+  (defun kk/start-ltex ()
+    (interactive)
+    (require 'eglot-ltex)
+    (call-interactively #'eglot))
+  )

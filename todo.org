@@ -1,5 +1,0 @@
-#+title: Todo
-
-* Inbox
-** TODO test local todo doom emacs
-[[file:/shared/Documents/Logiciels/editors_set-up/doom-emacs/doom-emacs.org][file:/shared/Documents/Logiciels/editors_set-up/doom-emacs/doom-emacs.org]]

@@ -5,19 +5,24 @@
 #+attr_html: :width 30%;
 [[file:.doom.d/splash/doom-emacs-color.png]]
 
-** Aim(s)
+** Context of the project
 TODO
 
-** Configuration
-Output of [[file:doom-emacs.org][doom-emacs.org]]:
-- [[file:init.el][init.el]]
-- [[file:packages.el][packages.el]]
-- [[file:config.el][config.el]]
-
-If you are interested in a similar litterate configuration, you should also take a look at his [[https://gitlab.com/zzamboni/dot-doom][Diego Zamboni doom emacs configuration]] that I used as model. You should also check out his free book on [[https://leanpub.com/lit-config][Literate Configuration]].
+** Content of the project
+| File/Folder | Descritption |
+|-------------+--------------|
+| TODO        | [[file:init.el][init.el]]      |
+| TODO        | [[file:packages.el][package.el]]   |
+| TODO        | [[file:config.el][config.el]]    |
 
 For great splash images, see [[https://gitlab.com/zzamboni/dot-doom/-/tree/master/splash]].
-
 For great icons, see https://github.com/eccentric-j/doom-icon
-** How to deploy?
-TODO
+
+** Deployement
+
+#+begin_src shell :results none
+ln -s $PWD/doom-emacs.desktop ~/.local/share/applications/doom-emacs.desktop
+mkdir $HOME/.doom.d
+ln -s $PWD/*.el ~/.doom.d/
+ln -s $PWD/splash ~/.doom.d/
+#+end_src

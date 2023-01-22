@@ -55,7 +55,6 @@
 (package! julia-vterm)
 (package! ob-julia-vterm)
 
-;;(package! lsp-ltex)
-;;(package! eglot-ltex
-;; :recipe (:host github
-;;           :repo "emacs-languagetool/eglot-ltex"))
+(package! eglot-ltex
+ :recipe (:host github
+           :repo "emacs-languagetool/eglot-ltex"))
