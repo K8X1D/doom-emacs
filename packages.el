@@ -61,3 +61,10 @@
 
 ;;; Guix interface
 (package! guix)
+
+;;; Graphviz
+(package! graphviz-dot-mode)
+
+;;; Remove solaire
+;;; - mess line highlight
+;;(package! solaire-mode :disable t)
