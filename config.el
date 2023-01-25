@@ -84,47 +84,106 @@
    )
 
 ;; Esthetics
-(setq doom-theme 'doom-gruvbox)
-(setq display-line-numbers-type t)
-(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16 :weight 'normal)
-      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 20 :weight 'normal)
-      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
-(if (< emacs-major-version 29) nil
+(setq! doom-theme 'doom-gruvbox)
+(custom-set-faces
+  `(cursor ((t (:background "#ebddb2")))) ;; from white
+;; Add 1 tone to hl-line face
+  `(hl-line ((t (:background "#504945")))) ;; from #3c3836
+  `(solaire-hl-line-face ((t (:background "#3c3836"))))) ;; from #282828
+
+;;(setq! doom-gruvbox-dark-variant "hard")
+;;(setq! doom-gruvbox-brighter-comments t)
+
+
+(setq! display-line-numbers-type t)
+;;(setq doom-font (font-spec :family "DejaVu Sans Mono" :size 16 :weight 'normal)
+;;      doom-big-font (font-spec :family "DejaVu Sans Mono" :size 20 :weight 'normal)
+;;      doom-unicode-font (font-spec :family "DejaVu Sans Mono" :size 14)
+;;      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16))
+
+;; Under evaluation...
+(setq! doom-font (font-spec :family "Fira Code" :size 16 :weight 'semi-light)
+      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 16))
+
+
+(if (>= emacs-major-version 29)
     (add-hook 'after-init-hook 'pixel-scroll-precision-mode))
 
-;; Frames opacity
-(if (eq window-system 'pgtk)
-    (set-frame-parameter nil 'alpha-background 80)
-  (set-frame-parameter nil 'alpha 90))
+;;;; Frames opacity (based on version and pgtk build)
+;; seems to cause problem on pgtk 28
+;;(if (and (eq window-system 'pgtk) (>= emacs-major-version 29))
+;;    (progn
+;;      (set-frame-parameter nil 'alpha-background 80)
+;;      (add-to-list 'default-frame-alist '(alpha-background . 80)))
+;;  (progn
+;;    (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+;;    (add-to-list 'default-frame-alist '(alpha . (90 . 90)))))
 
-(if (eq window-system 'pgtk)
-    (add-to-list 'default-frame-alist '(alpha-background . 80))
-    (add-to-list 'default-frame-alist '(alpha . 90)))
 
-(setq tab-bar-show nil) ;; Ensure that tab don't show
+(setq! tab-bar-show nil) ;; Ensure that tab don't show
 
-;;; Org ;;
-(setq org-directory "~/org")
+;; Vertico configuration
+  (setq! vertico-posframe-parameters
+      '((left-fringe . 8)
+        (right-fringe . 8)))
+
+;;Correct candidate hiding when names are long
+;; - see https://github.com/tumashu/vertico-posframe/issues/14
+(setq! vertico-posframe-truncate-lines nil)
+
+
+;;;
+;;; Org
+;;;
+
+;;; Org (General Configurations)
+(setq! org-directory "~/org")
 (remove-hook 'org-mode-hook #'+org-enable-auto-reformat-tables-h) ;; stop autoreformating for tables
 
-;; hide emphasis markers
+;;; Esthetics
+
+;; Priorities symbols
+(use-package! org-fancy-priorities
+  :config
+  (setq! org-fancy-priorities-list '("[HIGH]" "[MID]" "[LOW]")))
+
+;; Bullets symbols
+(use-package! org-superstar
+  :config
+  (setq! org-superstar-headline-bullets-list '("◉" "○" "◈" "◇" "✳")))
+
+
+;; Emphasis markers configurations
+;;(setq! org-hide-emphasis-markers t)
 (setq! org-hide-emphasis-markers t
        org-appear-autoemphasis t
        org-appear-autolinks t)
+
+;; Show emphasis marker only in evil-insert state
+;; from https://github.com/awth13/org-appear
 (add-hook! 'org-mode-hook 'org-appear-mode)
+(setq! org-appear-trigger 'manual)
+(add-hook 'org-mode-hook (lambda ()
+                           (add-hook 'evil-insert-state-entry-hook
+                                     #'org-appear-manual-start
+                                     nil
+                                     t)
+                           (add-hook 'evil-insert-state-exit-hook
+                                     #'org-appear-manual-stop
+                                     nil
+                                     t)))
 
 ;; Personal information
-(setq user-full-name "Kevin Kaiser"
+(setq! user-full-name "Kevin Kaiser"
       user-mail-address "k8x1d@proton.me")
 
 
 ;; Authorization file
-(setq auth-sources '("~/.authinfo"))
+(setq! auth-sources '("~/.authinfo"))
 
 ;;; Writing support
-(setq reftex-default-bibliography "/home/k8x1d/Zotero/k8x1d.bib")
-(setq +latex-viewers '(pdf-tools))
+(setq! reftex-default-bibliography "/home/k8x1d/Zotero/k8x1d.bib")
+(setq! +latex-viewers '(pdf-tools))
 
 (use-package! pdf-tools
   :hook (pdf-view-mode . pdf-view-midnight-minor-mode))
@@ -134,23 +193,23 @@
        citar-notes-paths '("/home/k8x1d/Zotero/notes/"))
 
 ;; Pomodoro configuration
-(setq alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
-(setq org-pomodoro-length 50)
-(setq org-pomodoro-short-break-length 10)
-(setq org-pomodoro-long-break-length 30)
+(setq! alert-user-configuration (quote ((((:category . "org-pomodoro")) libnotify nil))))
+(setq! org-pomodoro-length 50)
+(setq! org-pomodoro-short-break-length 10)
+(setq! org-pomodoro-long-break-length 30)
 
 
 
 (add-hook! 'text-mode-hook #'mixed-pitch-mode)
 (add-hook! 'text-mode-hook #'solaire-mode)
-(setq mixed-pitch-variable-pitch-cursor nil)
+(setq! mixed-pitch-variable-pitch-cursor nil)
 
-(setq browse-url-browser-function 'browse-url-generic
+(setq! browse-url-browser-function 'browse-url-generic
       browse-url-generic-program "firefox")
 
 
 (if (eq window-system 'pgtk)
-    (setq treemacs-read-string-input 'from-minibuffer))
+    (setq! treemacs-read-string-input 'from-minibuffer))
 
 
 ;;; Julia (better) support
@@ -175,6 +234,9 @@
   (defalias 'org-babel-variable-assignments:julia 'org-babel-variable-assignments:julia-vterm)
   )
 
+(use-package! eglot-jl
+  :config
+  (setq! eglot-jl-language-server-project "~/.julia/environments/v1.8"))
 
 
 ;;; Languagetool support
@@ -192,13 +254,12 @@
 ;; see https://valentjn.github.io/ltex/advanced-usage.html
 
 (use-package! eglot-ltex
-  :init
-  (setq eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
   :config
-  (defun kk/start-ltex ()
+  (defun k8x1d/start-ltex ()
     (interactive)
     (require 'eglot-ltex)
     (call-interactively #'eglot))
+  (setq! eglot-languagetool-server-path "~/Documents/Developpement/Logiciels/Editeurs/2022/A/ltex-ls-15.2.0/")
   )
 
 
@@ -210,3 +271,24 @@
     (if (eq window-system 'pgtk)
         (print "yes")
       (print "no")))
+
+
+;;; Babel
+;;
+
+;;;; Extra supported languages
+;;(org-babel-do-load-languages
+;; 'org-babel-load-languages
+;; '((dot . t))) ; this line activates dot
+
+
+;;; Graphviz support
+;; syntax
+(use-package graphviz-dot-mode
+  :ensure t
+  :config
+  (setq graphviz-dot-indent-width 4))
+
+;; completion
+(use-package company-graphviz-dot
+  )
