@@ -29,6 +29,12 @@ guix package --manifest=manifest.scm --profile="$GUIX_EXTRA_PROFILES"/doom-emacs
 #+end_src
 
 
+Adjust path for emacs if you intend to use mutiple version of emacs (in .bashrc or .bash_profile)
+#+begin_src shell :results none
+export EMACS=$GUIX_EXTRA_PROFILES/doom-emacs/doom-emacs/bin/emacs-28.2.50
+#+end_src
+
+
 #+begin_src shell :results none
 ln -s $PWD/doom-emacs.desktop ~/.local/share/applications/doom-emacs.desktop
 ln -s $PWD/icons/cute-demon.png $HOME/.local/share/icons/cute-demon.png
