@@ -1,9 +1,7 @@
 (specifications->manifest
  (list
-  ;; ;; Doom emacs ;;
-  "emacs-pgtk-native-comp" ;; flatwhatson version
-  ;;"k8x1d-emacs-pgtk" ;; k8x1d version
-  "git"
-  "ripgrep"
-  "fd"
+  "emacs-pgtk-native-comp" ;; Emacs text editor with `pgtk' and `xwidgets' support
+  "git" ;; Distributed version control system
+  "ripgrep" ;; Line-oriented search tool
+  "fd" ;; Simple, fast and user-friendly alternative to find
   ))
