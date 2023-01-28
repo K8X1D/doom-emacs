@@ -1,0 +1,10 @@
+#!/bin/sh
+PROJECT_NAME=doom-emacs
+GUIX_EXTRA_PROFILES=$HOME/.guix-extra-profiles
+GUIX_EXTRA=$HOME/.guix-extra
+
+mkdir -p "$GUIX_EXTRA/$PROJECT_NAME"
+guix pull --allow-downgrades --channels=channels.scm --profile="$GUIX_EXTRA/$PROJECT_NAME/guix"
+
+mkdir -p "$GUIX_EXTRA_PROFILES/$PROJECT_NAME"
+"$GUIX_EXTRA/$PROJECT_NAME/guix/bin/guix" package --manifest=manifest.scm --profile="$GUIX_EXTRA_PROFILES/$PROJECT_NAME/$PROJECT_NAME"

@@ -1,6 +1,7 @@
 #+title:  Doom Emacs configuration
 #+author: Kevin Kaiser
 #+author: k8x1d@proton.me
+#+startup: inlineimages
 
 #+attr_html: :width 30%;
 [[file:splash/doom-emacs-color.png]]
@@ -9,33 +10,42 @@
 TODO
 
 ** Content of the project
-| File/Folder | Descritption |
-|-------------+--------------|
-| TODO        | [[file:init.el][init.el]]      |
-| TODO        | [[file:packages.el][package.el]]   |
-| TODO        | [[file:config.el][config.el]]    |
-
+| File/Folder      | Description |
+|------------------+-------------|
+| [[file:init.el][init.el]]          | TODO        |
+| [[file:packages.el][package.el]]       | TODO        |
+| [[file:config.el][config.el]]        | TODO        |
+| icons            | TODO        |
+| splash           | TODO        |
+| [[file:channels.scm][channels.scm]]     | TODO        |
+| [[file:manifest.scm][manifest.scm]]     | TODO        |
+| [[file:setup_doom-emacs][setup_doom-emacs]] | TODO        |
 For great splash images, see [[https://gitlab.com/zzamboni/dot-doom/-/tree/master/splash]].
 For great icons, see https://github.com/eccentric-j/doom-icon
 
 ** Deployement
-Set-up with guix
-#+begin_src shell :results none
-guix pull --allow-downgrades --channels=channels.scm
+*** Set-up with guix
+Set-up a particular profile for doom emacs
+#+begin_src bash :tangle setup_doom-emacs :shebang "#!/bin/sh"
+PROJECT_NAME=doom-emacs
 GUIX_EXTRA_PROFILES=$HOME/.guix-extra-profiles
-mkdir -p "$GUIX_EXTRA_PROFILES"/doom-emacs
-guix package --profile=$HOME/.guix-extra-profiles/doom-emacs/doom-emacs
-guix package --manifest=manifest.scm --profile="$GUIX_EXTRA_PROFILES"/doom-emacs/doom-emacs
-#+end_src
+GUIX_EXTRA=$HOME/.guix-extra
 
+mkdir -p "$GUIX_EXTRA/$PROJECT_NAME"
+guix pull --allow-downgrades --channels=channels.scm --profile="$GUIX_EXTRA/$PROJECT_NAME/guix"
+
+mkdir -p "$GUIX_EXTRA_PROFILES/$PROJECT_NAME"
+"$GUIX_EXTRA/$PROJECT_NAME/guix/bin/guix" package --manifest=manifest.scm --profile="$GUIX_EXTRA_PROFILES/$PROJECT_NAME/$PROJECT_NAME"
+#+end_src
+(see [[https://guix.gnu.org/cookbook/en/guix-cookbook.html#The-benefits-of-manifests][guix cookbook entrie on guix profile]] for more informations)
 
 Adjust path for emacs if you intend to use mutiple version of emacs (in .bashrc or .bash_profile)
 #+begin_src shell :results none
-export EMACS=$GUIX_EXTRA_PROFILES/doom-emacs/doom-emacs/bin/emacs-28.2.50
+export EMACS=$GUIX_EXTRA_PROFILES/doom-emacs/doom-emacs/bin/emacs-28.2
 #+end_src
 
-
-#+begin_src shell :results none
+Create symbolic links to relevant configuration files
+#+begin_src bash :tangle setup_doom-emacs :shebang "#!/bin/sh"
 ln -s $PWD/doom-emacs.desktop ~/.local/share/applications/doom-emacs.desktop
 ln -s $PWD/icons/cute-demon.png $HOME/.local/share/icons/cute-demon.png
 mkdir $HOME/.doom.d

@@ -179,7 +179,7 @@
 
 
 ;; Authorization file
-(setq! auth-sources '("~/.authinfo"))
+(setq! auth-sources '("~/.authinfo.gpg"))
 
 ;;; Writing support
 (setq! reftex-default-bibliography "/home/k8x1d/Zotero/k8x1d.bib")
@@ -285,10 +285,128 @@
 ;;; Graphviz support
 ;; syntax
 (use-package graphviz-dot-mode
-  :ensure t
   :config
   (setq graphviz-dot-indent-width 4))
 
 ;; completion
-(use-package company-graphviz-dot
+(use-package company-graphviz-dot)
+
+
+;;;
+;;; Completion
+;;;
+;;;
+
+(use-package! company
+  :config
+  (setq! company-global-modes '(not org-mode)) ;; exclude following modes
+ ;; (setq! tab-always-indent 'complete)
+ ;; (setq! company-idle-delay nil)
   )
+
+
+
+;;
+;; Syntax checker
+;;
+
+;; flyceck with ess have high cpu demand. Turn off by efault.
+(use-package! flycheck
+  :config
+  (setq flycheck-global-modes '(not ess-r-mode ess-mode))
+  ;;(setq! flycheck-idle-change-delay 5.0)
+  )
+
+
+
+;;
+;; Mail
+;;
+
+;;;; Enabling automatic email fetching
+;;;; ;;setq mu4e-get-mail-command "mbsync gmail proton"
+;;;; ;;;; get emails and index every 5 minutes
+;;;; ;;mu4e-update-interval 300
+;;;; ;;;; send emails with format=flowed
+;;;; ;;mu4e-compose-format-flowed t
+;;;; ;;;; no need to run cleanup after indexing for gmail
+;;;; ;;mu4e-index-cleanup nil
+;;;; ;;mu4e-index-lazy-check t
+;;;; ;;;; more sensible date format
+;;;; ;;mu4e-headers-date-format "%d.%m.%y")
+;;;; ;;;; Get mail
+;;;; ;;setq mu4e-get-mail-command "mbsync proton"
+;;;; ;;mu4e-change-filenames-when-moving t   ; needed for mbsync
+;;;; ;;mu4e-update-interval 120)             ; update every 2 minutes
+;;;; ;;;; Send mail
+;;;; ;;setq message-send-mail-function 'smtpmail-send-it
+;;;; ;;smtpmail-auth-credentials "~/.authinfo.gpg" ;; Here I assume you encrypted the credentials
+;;;; ;;smtpmail-smtp-server "127.0.0.1"
+;;;; ;;smtpmail-smtp-service 1025)
+;;;; ;;
+
+
+;; ;;;; Each path is relative to the path of the maildir you passed to mu
+(set-email-account! "proton"
+                    '(
+                      (mu4e-sent-folder       . "/proton/sent")
+                      (mu4e-drafts-folder     . "/proton/drafts")
+                      (mu4e-trash-folder      . "/proton/trash")
+                      (mu4e-refile-folder     . "/proton/All_Mail")
+                      (smtpmail-smtp-user     . "k8x1d@proton.me")
+                      (smtpmail-smtp-server . "127.0.0.1")
+                      (message-send-mail-function . smtpmail-send-it)
+                      (starttls-use-gnutls . t)
+                      (smtpmail-stream-type . starttls)
+                      (smtpmail-smtp-service . 1025)
+                      (mu4e-compose-signature . "---\nYours truly\nThe Baz"))
+                    t)
+
+(set-email-account! "gmail"
+                    '(
+                      (mu4e-sent-folder       . "/gmail/Sent_Mail")
+                      (mu4e-drafts-folder     . "/gmail/Drafts")
+                      (mu4e-trash-folder      . "/gmail/Trash")
+                      (mu4e-refile-folder     . "/gmail/All_Mail")
+                      (smtpmail-smtp-user     . "k8x1d90@gmail.com")
+                      (smtpmail-default-smtp-server . "smtp.gmail.com")
+                      (smtpmail-smtp-server . "smtp.gmail.com")
+                      (smtpmail-smtp-service . 587)
+                      (mu4e-compose-signature . "---\nYours truly\nThe Baz"))
+                    t)
+
+
+;; Need to fix mbsync...
+;;;;; From https://github.com/harishkrupo/oauth2ms/blob/main/steps.org
+;; ;;; Call the oauth2ms program to fetch the authentication token
+;;   (defun fetch-access-token ()
+;;     (with-temp-buffer
+;;	(call-process "oauth2ms" nil t nil "--encode-xoauth2")
+;;	(buffer-string)))
+;;
+;;   ;;; Add new authentication method for xoauth2
+;;   (cl-defmethod smtpmail-try-auth-method
+;;     (process (_mech (eql xoauth2)) user password)
+;;     (let* ((access-token (fetch-access-token)))
+;;	(smtpmail-command-or-throw
+;;	 process
+;;	 (concat "AUTH XOAUTH2 " access-token)
+;;	 235)))
+;;
+;;   ;;; Register the method
+;;   (with-eval-after-load 'smtpmail
+;;     (add-to-list 'smtpmail-auth-supported 'xoauth2))
+;;
+;;(set-email-account! "udem"
+;;                    '(
+;;                      (mu4e-sent-folder       . "/udem/Sent_Mail")
+;;                      (mu4e-drafts-folder     . "/udem/Drafts")
+;;                      (mu4e-trash-folder      . "/udem/Trash")
+;;                      (mu4e-refile-folder     . "/udem/All_Mail")
+;;                      (smtpmail-smtp-user     . "kevin.kaiser@umontreal.ca")
+;;                      (smtpmail-default-smtp-server . "smtp.office365.com")
+;;                      (smtpmail-smtp-server         . "smtp.office365.com")
+;;                      (smtpmail-smtp-service . 587)
+;;                      (smtpmail-stream-type .  starttls)
+;;                      (mu4e-compose-signature . "---\nYours truly\nThe Baz"))
+;;                    t)
