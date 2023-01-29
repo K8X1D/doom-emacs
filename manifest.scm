@@ -12,4 +12,10 @@
   ;; Email module
   "mu" ;; Quickly find emails
   "isync" ;; Mailbox synchronization program
+
+  ;; Vterm
+  "cmake" ;; Cross-platform build system
+  "libtool" ;; Generic shared library support tools
+  "perl" ;; Implementation of the Perl programming language
+
   ))
