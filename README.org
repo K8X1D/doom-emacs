@@ -24,6 +24,11 @@ For great splash images, see [[https://gitlab.com/zzamboni/dot-doom/-/tree/maste
 For great icons, see https://github.com/eccentric-j/doom-icon
 
 ** Deployement
+*** Clone Doom emacs repo
+#+begin_src shell :results none
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+#+end_src
+
 *** Set-up with guix
 Set-up a particular profile for doom emacs
 #+begin_src bash :tangle setup_doom-emacs :shebang "#!/bin/sh"
@@ -39,9 +44,15 @@ mkdir -p "$GUIX_EXTRA_PROFILES/$PROJECT_NAME"
 #+end_src
 (see [[https://guix.gnu.org/cookbook/en/guix-cookbook.html#The-benefits-of-manifests][guix cookbook entrie on guix profile]] for more informations)
 
+Cause problems...
 Adjust path for emacs if you intend to use mutiple version of emacs (in .bashrc or .bash_profile)
 #+begin_src shell :results none
-export EMACS=$GUIX_EXTRA_PROFILES/doom-emacs/doom-emacs/bin/emacs-28.2
+#export EMACS=$GUIX_EXTRA_PROFILES/doom-emacs/doom-emacs/bin/emacs-28.2
+#+end_src
+
+Add doom bin to path (in .bashrc or .bash_profile)
+#+begin_src shell :results none
+PATH="$HOME/.config/emacs/bin:$PATH"
 #+end_src
 
 Create symbolic links to relevant configuration files
@@ -51,4 +62,9 @@ ln -s $PWD/icons/cute-demon.png $HOME/.local/share/icons/cute-demon.png
 mkdir $HOME/.doom.d
 ln -s $PWD/*.el ~/.doom.d/
 ln -s $PWD/splash ~/.doom.d/
+#+end_src
+
+Install doom
+#+begin_src shell :results none
+doom install
 #+end_src

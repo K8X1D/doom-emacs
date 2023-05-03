@@ -1,0 +1,22 @@
+#!/bin/sh
+PROJECT_NAME=doom-emacs
+GUIX_EXTRA_PROFILES=$HOME/.guix-extra-profiles
+GUIX_EXTRA=$HOME/.guix-extra
+PROJECT_ROOT=$PWD/..
+
+mkdir -p "$GUIX_EXTRA/$PROJECT_NAME"
+guix pull --allow-downgrades --channels=channels.scm --profile="$GUIX_EXTRA/$PROJECT_NAME/guix"
+
+mkdir -p "$GUIX_EXTRA_PROFILES/$PROJECT_NAME"
+"$GUIX_EXTRA/$PROJECT_NAME/guix/bin/guix" package --manifest=manifest.scm --profile="$GUIX_EXTRA_PROFILES/$PROJECT_NAME/$PROJECT_NAME"
+
+mkdir $HOME/.local/share/applications
+ln -s $PROJECT_ROOT/doom-emacs.desktop $HOME/.local/share/applications/doom-emacs.desktop
+mkdir $HOME/.local/share/icons
+ln -s $PROJECT_ROOT/icons/cute-demon.png $HOME/.local/share/icons/cute-demon.png
+mkdir $HOME/.doom.d
+ln -s $PROJECT_ROOT/config.el ~/.doom.d/config.el
+ln -s $PROJECT_ROOT/packages.el ~/.doom.d/packages.el
+ln -s $PROJECT_ROOT/config.el ~/.doom.d/config.el
+ln -s $PROJECT_ROOT/splash ~/.doom.d/
+ln -s $PROJECT_ROOT/bin/doom-emacs ~/.local/bin

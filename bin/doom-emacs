@@ -1,0 +1,6 @@
+#!/bin/sh
+#PROJECT_NAME=doom-emacs
+#PROJECT_PATH=$HOME/.guix-extra-profiles/$PROJECT_NAME/$PROJECT_NAME
+#$PROJECT_PATH/bin/emacs-28.2
+emacs-28.2 -bg '#282828'
+# guix shell --check -m ~/Documents/Developpement/Logiciels/Editeurs/doom-emacs/manifest.scm -- emacs-28.2 -bg '#282828'
